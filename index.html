@@ -484,7 +484,7 @@ solana-cli 1.18.26 (client:SolanaLabs / Agave Native aarch64)</pre>
                 Decomposing Galois Fields: 5.58x Speedup to Solana Shredding via ARM NEON
               </h3>
               <p class="blog-excerpt">
-                Why Agave's Reed-Solomon erasure engine silently fell back to split 64-bit lookups on ARM64, and how in-register 4-bit nibble tables (<code>vqtbl1q_u8</code>) delivered 230 MiB/s throughput with 100% bit-exact wire parity.
+                How 4-bit nibble tables (<code>vqtbl1q_u8</code>) inside ARM NEON vector registers eliminated the silent scalar fallback in <code>reed-solomon-erasure</code>, delivering 230 MiB/s throughput with bit-exact wire parity.
               </p>
             </div>
             <div class="blog-footer" style="flex-direction: column; align-items: stretch; gap: 10px;">
@@ -508,10 +508,10 @@ solana-cli 1.18.26 (client:SolanaLabs / Agave Native aarch64)</pre>
                 <span>8 min read</span>
               </div>
               <h3 class="blog-title" style="margin: 12px 0;">
-                When Your Stack Frame Collapses at 4KB: The Anchor Dispatcher Heap-Spill Transform
+                Resolving the SBF 4,096-Byte Stack Limit in Anchor Dispatchers
               </h3>
               <p class="blog-excerpt">
-                Why complex Anchor smart contracts hit 7,360-byte frame explosions in SBF, why naive <code>Box&lt;T&gt;</code> breaks Anchor's CPI codegen, and how deterministic field-level heap-spilling eliminates the limit in 0.93s build times.
+                Why complex instructions trigger 7,360-byte frame overflows in SBF, why composite <code>Box&lt;T&gt;</code> wrappers break Anchor's CPI codegen, and how field-level heap allocation keeps frames under 1,800 bytes.
               </p>
             </div>
             <div class="blog-footer" style="flex-direction: column; align-items: stretch; gap: 10px;">
@@ -535,10 +535,10 @@ solana-cli 1.18.26 (client:SolanaLabs / Agave Native aarch64)</pre>
                 <span>9 min read</span>
               </div>
               <h3 class="blog-title" style="margin: 12px 0;">
-                The 31-Slot Blackout: Hunting Down Agave Bug #6845 and Pre-Caching Epoch Boundary Schedules
+                Eliminating the 31-Slot RPC Leader Schedule Failure at Epoch Boundaries
               </h3>
               <p class="blog-excerpt">
-                How an audit of <code>rpc.rs:1004</code> uncovered why RPC nodes return Error -32602 for 31 slots at every epoch transition, and how an async background pre-cacher restores 100% schedule availability without lock contention.
+                How a code audit of <code>rpc.rs</code> uncovered the root cause of error -32602 across epoch boundaries, and how asynchronous background pre-caching restores 100% schedule availability.
               </p>
             </div>
             <div class="blog-footer" style="flex-direction: column; align-items: stretch; gap: 10px;">

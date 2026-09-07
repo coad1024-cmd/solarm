@@ -166,11 +166,23 @@ We updated our CI template (`ci-templates/arm64-release.yml`) to use `container:
 
 ---
 
-### What's Next
+### What We're Doing Next
 
-We packaged this work into an open-source project called **SolARM**:
-- A public repository with a working 1-line installer for Linux ARM64: [`coad1024-cmd/solana-arm64-linux`](https://github.com/coad1024-cmd/solana-arm64-linux).
-- A private staging engine (`agave-arm64-engine`) with reproducible build scripts, FFI patchers, and multi-distro test runners.
-- An upstream grant proposal submitted to the Solana Foundation to add native ARM64 release automation directly to Anza's core CI pipeline.
+We packaged this work into **SolARM** ([`coad1024-cmd/solana-arm64-linux`](https://github.com/coad1024-cmd/solana-arm64-linux)), providing a working 1-line installer for Linux ARM64 systems.
 
-If you are running Linux on an Apple Silicon machine, an AWS Graviton instance, or an Oracle Ampere server, the 1-line installer is live on GitHub. The goal is to make Linux ARM64 a first-class release target upstream so no one has to debug GCC 15 headers just to run a test validator.
+Moving forward from this proof of concept, here is what we are building next:
+
+1. **Automated CI/CD on Native ARM64 Runners:**
+   Setting up continuous delivery on GitHub's native `ubuntu-24.04-arm` runners. Release builds will compile inside an `ubuntu:22.04` container to enforce the `glibc 2.35` floor, automatically generating `.tar.bz2` release tarballs and SHA-256 manifests whenever Anza cuts a new release tag.
+
+2. **Automated Multi-Distro Verification Matrix:**
+   Integrating our Docker test harness into the CI pipeline. Every release candidate will automatically be tested inside isolated Ubuntu 22.04, Ubuntu 24.04, Debian 12, and Fedora 40 containers—running dynamic linkage inspection and smoke tests—before assets are published.
+
+3. **Upstream PRs to Anza:**
+   - Submitting the GCC 15 `<cstdint>` preprocessor fix directly to `anza-xyz/rust-rocksdb` so RocksDB builds out-of-the-box on modern Linux toolchains without manual patching.
+   - Submitting a pull request to `anza-xyz/agave` (following up on Issue #6417) with the ARM64 release workflows and packaging scripts to make `aarch64-unknown-linux-gnu` a permanently supported upstream release target.
+
+4. **Static / Musl Linking Exploration:**
+   Investigating `aarch64-unknown-linux-musl` builds to evaluate whether we can statically link C-runtime dependencies entirely, producing self-contained binaries suitable for Alpine Linux and minimal container deployments.
+
+If you are running Linux on Apple Silicon, AWS Graviton, or Oracle Ampere, the installer is live on GitHub. The ultimate goal is simple: get Linux ARM64 fully integrated upstream so that no developer or validator operator ever has to debug toolchains just to run Solana software.

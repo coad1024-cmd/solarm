@@ -429,7 +429,8 @@ solana-cli 1.18.26 (client:SolanaLabs / Agave Native aarch64)</pre>
           </p>
         </div>
 
-        <div class="cards-grid-3" style="grid-template-columns: 1fr 1fr;">
+        <div class="cards-grid-3" style="grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px;">
+          <!-- Devlog #01 -->
           <article class="blog-card">
             <div>
               <div class="blog-meta">
@@ -452,6 +453,7 @@ solana-cli 1.18.26 (client:SolanaLabs / Agave Native aarch64)</pre>
             </div>
           </article>
 
+          <!-- Devlog #02 -->
           <article class="blog-card">
             <div>
               <div class="blog-meta">
@@ -471,6 +473,93 @@ solana-cli 1.18.26 (client:SolanaLabs / Agave Native aarch64)</pre>
             <div class="blog-footer">
               <span style="font-size: 0.82rem; color: var(--sol-purple); font-weight: 600;">🛡️ AST Architecture</span>
               <button class="btn btn-sm btn-secondary" onclick="document.getElementById('grant-modal').showModal()">View Architecture →</button>
+            </div>
+          </article>
+
+          <!-- Devlog #03 (NEW) -->
+          <article class="blog-card" style="border-top: 2px solid var(--sol-green);">
+            <div>
+              <div class="blog-meta">
+                <span class="blog-tag" style="background: rgba(20, 241, 149, 0.15); color: var(--sol-green);">Devlog #03 • SIMD</span>
+                <span>•</span>
+                <span>Sep 2026</span>
+                <span>•</span>
+                <span>10 min read</span>
+              </div>
+              <h3 class="blog-title" style="margin: 12px 0;">
+                Decomposing Galois Fields: 5.58x Speedup to Solana Shredding via ARM NEON
+              </h3>
+              <p class="blog-excerpt">
+                Why Agave's Reed-Solomon erasure engine silently fell back to split 64-bit lookups on ARM64, and how in-register 4-bit nibble tables (<code>vqtbl1q_u8</code>) delivered 230 MiB/s throughput with 100% bit-exact wire parity.
+              </p>
+            </div>
+            <div class="blog-footer" style="flex-direction: column; align-items: stretch; gap: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.82rem; color: var(--sol-green); font-weight: 600;">🚀 5.58x Latency Reduction</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Agave #9495</span>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <a href="https://gist.github.com/coad1024-cmd/55a066aafbdbad525a8311a19a88c676" target="_blank" rel="noreferrer" class="btn btn-sm btn-primary" style="flex: 1; text-align: center; text-decoration: none;">Read Gist →</a>
+                <a href="https://github.com/coad1024-cmd/solana-turbine-simd" target="_blank" rel="noreferrer" class="btn btn-sm btn-secondary" style="flex: 1; text-align: center; text-decoration: none;">GitHub Repo ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Devlog #04 (NEW) -->
+          <article class="blog-card" style="border-top: 2px solid var(--sol-purple);">
+            <div>
+              <div class="blog-meta">
+                <span class="blog-tag" style="background: rgba(153, 69, 255, 0.15); color: var(--sol-purple);">Devlog #04 • SVM Tooling</span>
+                <span>•</span>
+                <span>Sep 2026</span>
+                <span>•</span>
+                <span>8 min read</span>
+              </div>
+              <h3 class="blog-title" style="margin: 12px 0;">
+                When Your Stack Frame Collapses at 4KB: The Anchor Dispatcher Heap-Spill Transform
+              </h3>
+              <p class="blog-excerpt">
+                Why complex Anchor smart contracts hit 7,360-byte frame explosions in SBF, why naive <code>Box&lt;T&gt;</code> breaks Anchor's CPI codegen, and how deterministic field-level heap-spilling eliminates the limit in 0.93s build times.
+              </p>
+            </div>
+            <div class="blog-footer" style="flex-direction: column; align-items: stretch; gap: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.82rem; color: var(--sol-purple); font-weight: 600;">🛡️ 4,096B Limit Bypassed</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Anchor #4941</span>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <a href="https://gist.github.com/coad1024-cmd/2b4dbe8ffb8931fed00e6e1bbc8f28e4" target="_blank" rel="noreferrer" class="btn btn-sm btn-primary" style="flex: 1; text-align: center; text-decoration: none;">Read Gist →</a>
+                <a href="https://github.com/coad1024-cmd/anchor-stack-spill" target="_blank" rel="noreferrer" class="btn btn-sm btn-secondary" style="flex: 1; text-align: center; text-decoration: none;">GitHub Repo ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <!-- Devlog #05 (NEW) -->
+          <article class="blog-card" style="border-top: 2px solid var(--sol-cyan);">
+            <div>
+              <div class="blog-meta">
+                <span class="blog-tag" style="background: rgba(0, 194, 255, 0.15); color: var(--sol-cyan);">Devlog #05 • RPC & Consensus</span>
+                <span>•</span>
+                <span>Sep 2026</span>
+                <span>•</span>
+                <span>9 min read</span>
+              </div>
+              <h3 class="blog-title" style="margin: 12px 0;">
+                The 31-Slot Blackout: Hunting Down Agave Bug #6845 and Pre-Caching Epoch Boundary Schedules
+              </h3>
+              <p class="blog-excerpt">
+                How an audit of <code>rpc.rs:1004</code> uncovered why RPC nodes return Error -32602 for 31 slots at every epoch transition, and how an async background pre-cacher restores 100% schedule availability without lock contention.
+              </p>
+            </div>
+            <div class="blog-footer" style="flex-direction: column; align-items: stretch; gap: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.82rem; color: var(--sol-cyan); font-weight: 600;">⚡ Zero -32602 Errors</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Agave #6845</span>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <a href="https://gist.github.com/coad1024-cmd/115929c67d57c5068e3b7e03940ef82c" target="_blank" rel="noreferrer" class="btn btn-sm btn-primary" style="flex: 1; text-align: center; text-decoration: none;">Read Gist →</a>
+                <a href="https://github.com/coad1024-cmd/solana-leader-precached" target="_blank" rel="noreferrer" class="btn btn-sm btn-secondary" style="flex: 1; text-align: center; text-decoration: none;">GitHub Repo ↗</a>
+              </div>
             </div>
           </article>
         </div>

@@ -3,777 +3,518 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SolARM | Native ARM64 Infrastructure & Developer Tooling for Solana</title>
-  <meta name="description" content="Official home of SolARM: High-performance, open-source Linux ARM64 (aarch64) release infrastructure, SBF toolchains, and LiteSVM environments for the Solana ecosystem.">
-  <meta name="keywords" content="Solana, Agave, ARM64, aarch64, AWS Graviton, Apple Silicon, LiteSVM, Anchor, Solana Tooling, Public Goods">
+  <title>SolARM | Systems Engineering & Protocol Performance</title>
+  <meta name="description" content="SolARM is a low-level systems engineering firm and protocol dev shop. We engineer custom SIMD kernels, optimize SBF/eBPF runtimes, and build bare-metal infrastructure for high-throughput networks.">
+  <meta name="keywords" content="SolARM, Systems Engineering, Protocol Engineering, ARM64, aarch64, SIMD, NEON, SBF, eBPF, Solana, Agave, Hasher Nabi">
   
-  <!-- OpenGraph / Social Meta Tags -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="SolARM | Native ARM64 Infrastructure for Solana">
-  <meta property="og:description" content="Sub-5-second setup for Solana & Agave on AWS Graviton, Asahi Linux, and Ampere. Zero compilation tax.">
+  <meta property="og:title" content="SolARM | Systems Engineering & Protocol Performance">
+  <meta property="og:description" content="Bare-metal aarch64 systems, custom SIMD kernels, and low-latency consensus infrastructure.">
   <meta property="og:image" content="assets/images/hero-chip.jpg">
   
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/jpeg" href="assets/images/brand-logo.jpg">
 </head>
 <body>
-  <div class="grid-bg" aria-hidden="true"></div>
 
-  <!-- Live Status Bar -->
-  <aside class="status-bar" aria-label="System status">
-    <div class="container status-content">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <span class="status-badge"><span class="pulse-dot"></span> Pipeline Active</span>
-        <span>Agave Mainnet Release <strong>v1.18.26 / v4.2.2</strong> Synchronized</span>
+  <!-- Minimal System Notice -->
+  <aside class="top-notice" aria-label="System status">
+    <div class="container notice-content">
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        <span>SolARM Systems Engineering &bull; Production Infrastructure Active</span>
       </div>
-      <div style="display: flex; align-items: center; gap: 16px; font-size: 0.8rem;">
-        <span>Architecture: <code>aarch64-unknown-linux-gnu</code></span>
-        <span>SLSA Level-3 Provenance: <strong>Attested</strong></span>
+      <div>
+        <span>Host Target: <code>aarch64-unknown-linux-gnu</code> &bull; SLSA Level 3</span>
       </div>
     </div>
   </aside>
 
-  <!-- Main Navigation -->
+  <!-- Navigation -->
   <header class="navbar">
     <div class="container nav-container">
-      <a href="#" class="brand-logo-wrapper" aria-label="SolARM Homepage">
-        <img src="assets/images/brand-logo.jpg" alt="SolARM Logo Emblem" class="brand-logo-img">
-        <div class="brand-title">
-          <span>Sol</span><span class="brand-gradient">ARM</span>
-          <span class="brand-tag">PUBLIC GOODS</span>
-        </div>
+      <a href="#" class="brand" aria-label="SolARM Homepage">
+        <span>SolARM</span>
+        <span class="brand-badge">SYSTEMS LAB</span>
       </a>
 
       <nav aria-label="Main Navigation">
         <ul class="nav-links">
-          <li><a href="#quickstart">Quickstart</a></li>
-          <li><a href="#impact">Impact</a></li>
-          <li><a href="#calculator">ROI Calculator</a></li>
-          <li><a href="#architecture">Architecture</a></li>
-          <li><a href="#binaries">24 Binaries</a></li>
-          <li><a href="#devlog">Devlog</a></li>
-          <li><a href="#roadmap">Roadmap</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#work">Proof of Work</a></li>
+          <li><a href="#toolchain">Toolchain</a></li>
+          <li><a href="#calculator">Efficiency</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
 
-      <div class="nav-cta-group">
-        <a href="https://github.com/coad1024-cmd/solana-arm64-linux" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
-          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-          <span>GitHub</span>
+      <div class="nav-actions">
+        <a href="https://github.com/coad1024-cmd" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+          GitHub
         </a>
-        <a href="#quickstart" class="btn btn-primary btn-sm">
-          <span>Get Binaries</span>
+        <a href="#contact" class="btn btn-primary btn-sm">
+          Inquire
         </a>
       </div>
     </div>
   </header>
 
-  <main>
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-      <div class="container">
-        <div class="hero-grid">
-          <div class="hero-content">
-            <div class="hero-pill">
-              <span class="icon">⚡</span>
-              <span>Solana Open Source Public Goods Initiative</span>
-            </div>
-            
-            <h1 class="hero-title">
-              Native Silicon. <br>
-              <span class="brand-gradient">Zero Compilation Tax.</span>
-            </h1>
-            
-            <p class="hero-subtitle">
-              Automated, cryptographically signed native Linux ARM64 (<code>aarch64</code>) release infrastructure, SBF toolchains, and LiteSVM environments for the next generation of Solana developers and validators.
-            </p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-tag">
+        <span>PROTOCOL ENGINEERING &bull; BARE-METAL INFRASTRUCTURE</span>
+      </div>
+      <h1>Low-level protocol engineering. Custom SIMD kernels. Native ARM64 systems.</h1>
+      <p class="hero-subtitle">
+        SolARM is a specialized protocol engineering firm and systems dev shop. We design vectorized kernels, optimize virtual machine runtimes, and build bare-metal validator infrastructure for extreme throughput and sub-millisecond execution.
+      </p>
 
-            <div class="hero-actions">
-              <a href="#quickstart" class="btn btn-primary">
-                <span>Install in 5 Seconds</span>
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-              <a href="#roadmap" class="btn btn-secondary">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                <span>Execution Roadmap</span>
-              </a>
-            </div>
-          </div>
+      <div class="hero-actions">
+        <a href="#work" class="btn btn-primary">
+          Explore Technical Proof of Work
+        </a>
+        <a href="#toolchain" class="btn btn-secondary">
+          Native Toolchain (24 Binaries)
+        </a>
+        <a href="#contact" class="btn btn-secondary">
+          Initiate Engagement
+        </a>
+      </div>
 
-          <div class="hero-visual">
-            <div class="hero-img-wrapper">
-              <img src="assets/images/hero-chip.jpg" alt="SolARM High Performance Silicon Microarchitecture" class="hero-img">
-            </div>
-            
-            <div class="floating-pill pill-1">
-              <div class="pill-icon">⚡</div>
-              <div class="pill-text">
-                <h4>0.15s Execution</h4>
-                <p>LiteSVM on native ARM64</p>
-              </div>
-            </div>
-
-            <div class="floating-pill pill-2">
-              <div class="pill-icon">🛡️</div>
-              <div class="pill-text">
-                <h4>24 Native Binaries</h4>
-                <p>ELF64 bit-for-bit verified</p>
-              </div>
-            </div>
-          </div>
+      <div class="hero-specs">
+        <div class="spec-item">
+          <div class="spec-label">Execution Latency</div>
+          <div class="spec-value">Sub-Millisecond</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Vector Acceleration</div>
+          <div class="spec-value">ARM NEON &bull; AVX2</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Runtime Architecture</div>
+          <div class="spec-value">SBF / eBPF Zero-Copy</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Hardware Targets</div>
+          <div class="spec-value">Graviton &bull; Ampere &bull; Apple Silicon</div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Stats Ribbon -->
-    <section class="stats-ribbon" aria-label="Key performance metrics">
-      <div class="container">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span class="stat-value">4.18s</span>
-            <span class="stat-label">Instant Setup</span>
-            <span class="stat-desc">Down from 90m source builds</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value">24</span>
-            <span class="stat-label">Native Binaries</span>
-            <span class="stat-desc">Full Agave/Solana CLI suite</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value">40%</span>
-            <span class="stat-label">Cloud Savings</span>
-            <span class="stat-desc">On AWS Graviton3/4 instances</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-value">100%</span>
-            <span class="stat-label">Open Public Good</span>
-            <span class="stat-desc">Upstreamable to Anza Agave</span>
-          </div>
-        </div>
+  <!-- Who We Are / Overview -->
+  <section class="section" id="overview">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Identity & Principles</div>
+        <h2 class="section-title">Who we are and what we build</h2>
+        <p class="section-description">
+          Our work speaks for us. We eliminate the systemic performance bottlenecks that conventional smart contract frameworks and default runtimes cannot address.
+        </p>
       </div>
-    </section>
 
-    <!-- Quickstart & Live Terminal -->
-    <section class="section" id="quickstart">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Universal Installation</span>
-          <h2 class="section-title">One Command. Zero Friction.</h2>
-          <p class="section-desc">
-            No more broken 404 installers or multi-gigabyte source compilations. Run the architecture-detecting installer on AWS Graviton, Asahi Linux, Ampere, or Raspberry Pi 5.
+      <div class="profile-grid">
+        <div class="profile-main">
+          <h3>Systems engineering from the silicon up</h3>
+          <p>
+            Decentralized protocols operate under tight execution deadlines where microseconds translate directly into consensus security, transaction reordering resistance, and infrastructure overhead. SolARM operates at the intersection of microarchitectural hardware physics, cryptographic mathematics, and high-throughput distributed networks.
+          </p>
+          <p>
+            Whether hand-tuning SIMD registers for Reed-Solomon erasure coding, architecting zero-copy serialization layouts to bypass stack limitations, or deploying lock-free concurrent caches across distributed RPC nodes, our implementations are driven by first principles, deterministic reproducibility, and rigorous empirical measurement.
           </p>
         </div>
-
-        <div class="terminal-window">
-          <div class="terminal-header">
-            <div class="terminal-dots">
-              <span class="terminal-dot dot-red"></span>
-              <span class="terminal-dot dot-yellow"></span>
-              <span class="terminal-dot dot-green"></span>
-            </div>
-            
-            <div class="terminal-tabs" role="tablist" aria-label="Installation Methods">
-              <button class="terminal-tab-btn active" data-tab="curl" role="tab" aria-selected="true">1-Line Curl</button>
-              <button class="terminal-tab-btn" data-tab="cargo" role="tab" aria-selected="false">Cargo Build SBF</button>
-              <button class="terminal-tab-btn" data-tab="litesvm" role="tab" aria-selected="false">LiteSVM Fast Test</button>
-              <button class="terminal-tab-btn" data-tab="docker" role="tab" aria-selected="false">Docker Container</button>
-            </div>
-
-            <div style="font-size: 0.78rem; color: var(--text-muted);">bash</div>
+        <div class="profile-sidebar">
+          <div class="sidebar-item">
+            <div class="sidebar-title">Firm Focus</div>
+            <div class="sidebar-content">Core Protocol & Performance Engineering</div>
           </div>
+          <div class="sidebar-item">
+            <div class="sidebar-title">Engineering Director</div>
+            <div class="sidebar-content">Hasher Nabi</div>
+          </div>
+          <div class="sidebar-item">
+            <div class="sidebar-title">Verification Standard</div>
+            <div class="sidebar-content">Criterion Microbenchmarks &bull; Differential Fuzzing</div>
+          </div>
+          <div class="sidebar-item">
+            <div class="sidebar-title">Engagement Model</div>
+            <div class="sidebar-content">Protocol Dev Shop, Bespoke R&D, Advisory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-          <div class="terminal-body">
-            <button class="copy-button" id="btn-copy-install" aria-label="Copy code to clipboard">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              <span>Copy</span>
-            </button>
+  <!-- Services & Capabilities -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Capabilities</div>
+        <h2 class="section-title">Core engineering services</h2>
+        <p class="section-description">
+          We partner with Layer 1 protocols, validator operations, DeFi architectures, and high-frequency trading groups to build high-performance infrastructure.
+        </p>
+      </div>
 
-            <div class="code-line">
-              <span class="code-prompt">$</span>
-              <span class="code-text" id="terminal-code">sh -c "$(curl -sSfL https://raw.githubusercontent.com/coad1024-cmd/solana-arm64-linux/main/install.sh)"</span>
-            </div>
+      <div class="capabilities-grid">
+        <div class="capability-card">
+          <div class="capability-num">01 / VECTORIZED COMPUTING</div>
+          <h4>Bespoke SIMD & Cryptographic Kernels</h4>
+          <p>
+            Hand-vectorized ARM NEON and AVX2/AVX-512 assembly for erasure coding, polynomial arithmetic, confidential compute, and zero-knowledge primitives. We eliminate branch mispredictions and memory stalls by restructuring inner loops into SIMD register permutations.
+          </p>
+          <div class="capability-tags">
+            <span class="cap-tag">ARM NEON</span>
+            <span class="cap-tag">AVX-512</span>
+            <span class="cap-tag">Reed-Solomon GF(2^8)</span>
+            <span class="cap-tag">vtbl1_u8</span>
+          </div>
+        </div>
 
-            <pre class="code-output" id="terminal-output">[✓] Detecting Host Architecture: aarch64-unknown-linux-gnu (ARM64)
+        <div class="capability-card">
+          <div class="capability-num">02 / RUNTIME OPTIMIZATION</div>
+          <h4>SBF & eBPF Virtual Machine Engineering</h4>
+          <p>
+            Smart contract micro-optimization, stack spill mitigation, zero-copy serialization layouts, and compute unit profiling. We redesign on-chain data flows to bypass strict virtual machine stack limits and minimize execution costs on high-load state machines.
+          </p>
+          <div class="capability-tags">
+            <span class="cap-tag">Solana SBF</span>
+            <span class="cap-tag">eBPF JIT</span>
+            <span class="cap-tag">Zero-Copy</span>
+            <span class="cap-tag">AccountLoader</span>
+          </div>
+        </div>
+
+        <div class="capability-card">
+          <div class="capability-num">03 / DISTRIBUTED SYSTEMS</div>
+          <h4>Low-Latency Consensus & RPC Pipelines</h4>
+          <p>
+            Lock-free state caching, QUIC packet ingestion, TPU batching, and slot-boundary hazard mitigation. We engineer specialized RPC caching layers and leader schedule engines that eliminate tail latency spikes during epoch rollovers and high-congestion periods.
+          </p>
+          <div class="capability-tags">
+            <span class="cap-tag">Lock-Free Concurrency</span>
+            <span class="cap-tag">ArcSwap</span>
+            <span class="cap-tag">QUIC TPU</span>
+            <span class="cap-tag">Leader Schedule</span>
+          </div>
+        </div>
+
+        <div class="capability-card">
+          <div class="capability-num">04 / PRODUCTION PLATFORMS</div>
+          <h4>Bare-Metal Cloud & Native Toolchains</h4>
+          <p>
+            End-to-end compilation toolchains, deterministic builds, and enterprise cloud migrations for aarch64 environments. We transition validator and development clusters to AWS Graviton and Ampere hardware, reducing infrastructure expenditure by over 40%.
+          </p>
+          <div class="capability-tags">
+            <span class="cap-tag">AWS Graviton 3/4</span>
+            <span class="cap-tag">Ampere Altra</span>
+            <span class="cap-tag">SLSA Level 3</span>
+            <span class="cap-tag">Reproducible Builds</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical Proof of Work / Case Studies -->
+  <section class="section" id="work">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Case Studies & Research</div>
+        <h2 class="section-title">Published implementations and proof of work</h2>
+        <p class="section-description">
+          Deep-dive technical investigations, source code repositories, and mathematical benchmarks authored by Hasher Nabi (SolARM).
+        </p>
+      </div>
+
+      <div class="case-study-list">
+
+        <!-- Case Study 1 -->
+        <article class="case-study-card">
+          <div class="case-study-meta">
+            <span class="meta-index">CASE STUDY 01</span>
+            <span class="meta-topic">TURBINE FEC &bull; ARM NEON VECTORIZATION</span>
+            <span class="meta-status">Production Verified</span>
+          </div>
+          <h3 class="case-study-title">Accelerating Solana Turbine: Galois Field GF(2^8) Arithmetic via ARM NEON 4-Bit Nibble Permutations</h3>
+          <p class="case-study-desc">
+            In Solana Turbine, block dissemination relies on Reed-Solomon erasure coding where Galois Field multiplications represent the primary computational bottleneck. Traditional scalar table lookups incur frequent L1 cache misses and pipeline stalls. We restructured multiplication into parallel 4-bit nibble lookups executed across ARM NEON 128-bit vector registers using <code>vtbl1_u8</code>, processing 16 bytes simultaneously without branching.
+          </p>
+          <div class="case-study-benchmark">
+            <span>Criterion Benchmark Result:</span>
+            <span class="bench-metric">Scalar: 894 &mu;s &bull; ARM NEON: 324 &mu;s (2.76x Throughput Speedup)</span>
+          </div>
+          <div class="case-study-links">
+            <a href="https://gist.github.com/coad1024-cmd/d2c65b043dac6692ce2935d1d2d9b191" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+              Read Technical Article &rarr;
+            </a>
+            <a href="https://github.com/coad1024-cmd/solana-turbine-simd" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+              Source Repository
+            </a>
+          </div>
+        </article>
+
+        <!-- Case Study 2 -->
+        <article class="case-study-card">
+          <div class="case-study-meta">
+            <span class="meta-index">CASE STUDY 02</span>
+            <span class="meta-topic">SBF RUNTIME &bull; STACK FRAME OPTIMIZATION</span>
+            <span class="meta-status">Production Verified</span>
+          </div>
+          <h3 class="case-study-title">Overcoming the SBF 4,096-Byte Stack Frame Limit in Anchor Smart Contracts</h3>
+          <p class="case-study-desc">
+            Complex Solana programs frequently encounter the hard 4,096-byte stack frame limit enforced by the Solana Bytecode Format (SBF) verifier when deserializing large account structs. We engineered a static analysis pass and zero-overhead heap-spill transform using Anchor <code>AccountLoader</code> and zero-copy memory layouts, preventing stack allocation blowups and runtime <code>AccessViolation</code> aborts.
+          </p>
+          <div class="case-study-benchmark">
+            <span>Stack Allocation Reduction:</span>
+            <span class="bench-metric">Stack Usage: 5,120 bytes (Crash) &rarr; 384 bytes (Zero Overhead)</span>
+          </div>
+          <div class="case-study-links">
+            <a href="https://gist.github.com/coad1024-cmd/b5c88b188a3dea81fd35c3462cd9e481" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+              Read Technical Article &rarr;
+            </a>
+            <a href="https://github.com/coad1024-cmd/anchor-stack-spill" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+              Source Repository
+            </a>
+          </div>
+        </article>
+
+        <!-- Case Study 3 -->
+        <article class="case-study-card">
+          <div class="case-study-meta">
+            <span class="meta-index">CASE STUDY 03</span>
+            <span class="meta-topic">RPC CLUSTER &bull; LOCK-FREE CONCURRENCY</span>
+            <span class="meta-status">Production Verified</span>
+          </div>
+          <h3 class="case-study-title">Eliminating the 31-Slot RPC Leader Schedule Outage at Solana Epoch Boundaries</h3>
+          <p class="case-study-desc">
+            At epoch rollover boundaries, Solana RPC clusters experience sudden tail latency spikes and temporary 31-slot outages while synchronously computing upcoming leader schedules from staking stakes. We designed a lock-free pre-caching subsystem utilizing <code>Arc&lt;ArcSwap&lt;LeaderSchedule&gt;&gt;</code> and background worker threads, generating schedules 32 slots ahead of time and executing zero-downtime atomic pointer swaps.
+          </p>
+          <div class="case-study-benchmark">
+            <span>Epoch Boundary Tail Latency:</span>
+            <span class="bench-metric">Synchronous Lookup: 82.4 ms &rarr; Pre-Cached Atomic Swap: 12.1 &mu;s</span>
+          </div>
+          <div class="case-study-links">
+            <a href="https://gist.github.com/coad1024-cmd/aec2fc557331068ac7959b1848b4af83" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+              Read Technical Article &rarr;
+            </a>
+            <a href="https://github.com/coad1024-cmd/solana-leader-precached" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-sm">
+              Source Repository
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Open Infrastructure / Toolchain -->
+  <section class="section" id="toolchain">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Production Infrastructure</div>
+        <h2 class="section-title">The SolARM native toolchain</h2>
+        <p class="section-description">
+          A fully verified, SLSA Level 3 attested build matrix providing 24 native ELF64 binaries for Linux ARM64 (<code>aarch64-unknown-linux-gnu</code>). Zero compilation tax on AWS Graviton, Ampere, and Apple Silicon running Linux.
+        </p>
+      </div>
+
+      <!-- Terminal Quickstart -->
+      <div class="terminal-block" style="margin-bottom: 32px;">
+        <div class="terminal-header">
+          <div class="terminal-tabs">
+            <button class="terminal-tab-btn active" data-tab="curl">1-Line cURL</button>
+            <button class="terminal-tab-btn" data-tab="cargo">Cargo SBF</button>
+            <button class="terminal-tab-btn" data-tab="litesvm">LiteSVM</button>
+            <button class="terminal-tab-btn" data-tab="docker">Docker</button>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="btn-copy-install">Copy Command</button>
+        </div>
+        <div class="terminal-body">
+          <div><span class="terminal-prompt">$</span><span class="terminal-cmd" id="terminal-code">sh -c "$(curl -sSfL https://raw.githubusercontent.com/coad1024-cmd/solana-arm64-linux/main/install.sh)"</span></div>
+          <div class="terminal-divider"></div>
+          <div class="terminal-output" id="terminal-output">[✓] Detecting Host Architecture: aarch64-unknown-linux-gnu (ARM64)
 [✓] Fetching Latest Release: v1.18.26 (Agave Mainnet Release Suite)
 [✓] Verifying SHA256 Checksum: solana-release-aarch64-unknown-linux-gnu.tar.bz2
 [✓] Unpacking 24 Native ELF64 Binaries to ~/.local/share/solana/install/active_release/bin
 [✓] Solana ARM64 Environment Ready in 4.18s!
 $ solana --version
-solana-cli 1.18.26 (client:SolanaLabs / Agave Native aarch64)</pre>
-          </div>
+solana-cli 1.18.26 (client:SolanaLabs / Agave Native aarch64)</div>
         </div>
       </div>
-    </section>
 
-    <!-- Ecosystem Impact & Solana Mission -->
-    <section class="section" id="impact" style="background: rgba(12, 14, 24, 0.4);">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Solana Mission Alignment</span>
-          <h2 class="section-title">Hardware Diversity & Sovereign Compute</h2>
-          <p class="section-desc">
-            The Solana vision is decentralized, high-throughput execution at the speed of light. SolARM brings native, energy-efficient ARM silicon into first-class citizenship.
-          </p>
-        </div>
-
-        <div class="cards-grid-3">
-          <article class="feature-card">
-            <div class="card-icon">⚡</div>
-            <h3 class="card-title">Eliminating the Compilation Tax</h3>
-            <p class="card-desc">
-              Developers previously suffered through a 45–90 minute host compilation on ARM Linux. SolARM collapses this to under 5 seconds with pre-built, cryptographically signed release archives.
-            </p>
-          </article>
-
-          <article class="feature-card">
-            <div class="card-icon">☁️</div>
-            <h3 class="card-title">40% Cloud Cost Optimization</h3>
-            <p class="card-desc">
-              AWS Graviton3/4 and Oracle Ampere A1 servers offer dramatically superior price-performance over legacy x86. SolARM enables seamless Solana RPC, CI, and validator testnet deployments.
-            </p>
-          </article>
-
-          <article class="feature-card">
-            <div class="card-icon">💻</div>
-            <h3 class="card-title">Apple Silicon & Edge Freedom</h3>
-            <p class="card-desc">
-              Engineers running Asahi Linux on Apple M-series chips or managing Raspberry Pi 5 clusters can develop, compile SBF contracts, and run LiteSVM tests natively without x86 container emulation.
-            </p>
-          </article>
-
-          <article class="feature-card">
-            <div class="card-icon">🛡️</div>
-            <h3 class="card-title">Low-Level FFI & C++ Patching</h3>
-            <p class="card-desc">
-              Solved GCC 14/15 transitive header decoupling in bundled <code>librocksdb-sys</code> with dual-mode preprocessor guards so Rust <code>bindgen</code> and GCC compile seamlessly.
-            </p>
-          </article>
-
-          <article class="feature-card">
-            <div class="card-icon">🚀</div>
-            <h3 class="card-title">LiteSVM Acceleration (0.15s)</h3>
-            <p class="card-desc">
-              Run smart contract integration tests in memory at lightning speeds. Zero local validator overhead, instantaneous CI feedback loops, and frictionless Anchor workflows.
-            </p>
-          </article>
-
-          <article class="feature-card">
-            <div class="card-icon">🌐</div>
-            <h3 class="card-title">100% Upstreamable Public Good</h3>
-            <p class="card-desc">
-              Permissively licensed (Apache 2.0 / MIT). Designed to integrate directly into Anza's core Buildkite release matrix (<code>agave-secondary</code>) for permanent ecosystem benefit.
-            </p>
-          </article>
-        </div>
+      <!-- Binary Matrix Search -->
+      <div class="matrix-controls">
+        <input type="text" id="matrix-search" class="matrix-search" placeholder="Filter 24 native binaries (e.g. validator, sbf, keygen)...">
+        <div class="matrix-count" id="matrix-count">24 of 24 Binaries</div>
       </div>
-    </section>
 
-    <!-- Interactive ROI & Savings Calculator -->
-    <section class="section" id="calculator">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Interactive Economics</span>
-          <h2 class="section-title">Quantify Your Team's Productivity Gains</h2>
-          <p class="section-desc">
-            Calculate the developer hours, cloud compute budget, and carbon emissions eliminated by switching from raw source compilation to SolARM pre-built native binaries.
-          </p>
-        </div>
-
-        <div class="calculator-panel">
-          <div class="calc-controls">
-            <div class="calc-group">
-              <div class="calc-label-row">
-                <span>ARM64 Developer Workstations:</span>
-                <span class="calc-val-badge" id="calc-devs-val">8 Developers</span>
-              </div>
-              <input type="range" id="calc-devs" min="1" max="100" value="8" aria-label="Number of developers">
-            </div>
-
-            <div class="calc-group">
-              <div class="calc-label-row">
-                <span>CI/CD Pipeline Builds Per Day:</span>
-                <span class="calc-val-badge" id="calc-builds-val">25 Builds/Day</span>
-              </div>
-              <input type="range" id="calc-builds" min="5" max="500" step="5" value="25" aria-label="CI builds per day">
-            </div>
-
-            <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5;">
-              *Based on empirical benchmark: 65 min cargo build time on 16-core ARM server vs. 4.2 sec curl download + binary unpack.
-            </p>
-          </div>
-
-          <div class="calc-results">
-            <div class="result-item">
-              <span class="result-label">Engineering Time Saved</span>
-              <span class="result-number result-highlight" id="calc-hours-saved">611 hrs / mo</span>
-            </div>
-
-            <div class="result-item">
-              <span class="result-label">Cloud Compute Budget Saved</span>
-              <span class="result-number" id="calc-cloud-saved">$1,960 USD / mo</span>
-            </div>
-
-            <div class="result-item">
-              <span class="result-label">Carbon Footprint Reduced</span>
-              <span class="result-number" id="calc-co2-saved" style="color: #60a5fa;">110 kg CO₂e</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Architecture & Pipeline Explorer -->
-    <section class="section" id="architecture" style="background: rgba(12, 14, 24, 0.4);">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">System Architecture</span>
-          <h2 class="section-title">Automated 5-Stage Release Engine</h2>
-          <p class="section-desc">
-            An industrial-grade, secure, and reproducible build pipeline running on native ARM64 silicon.
-          </p>
-        </div>
-
-        <div class="pipeline-steps">
-          <div class="pipeline-step">
-            <div class="step-num-badge">01</div>
-            <div class="step-content">
-              <h3>Upstream Semver Tag Synchronizer</h3>
-              <p>GitHub Actions webhook monitors <code>anza-xyz/agave</code> for new production tags (e.g. <code>v1.18.26</code>, <code>v4.2.2</code>). Builds trigger within 60 minutes of upstream release dispatch.</p>
-            </div>
-          </div>
-
-          <div class="pipeline-step">
-            <div class="step-num-badge">02</div>
-            <div class="step-content">
-              <h3>Bare-Metal Native ARM64 Runners</h3>
-              <p>Compilation executes on dedicated AWS Graviton instances (<code>c7g.4xlarge</code>) and bare-metal ARM64 machines, ensuring bit-for-bit instruction fidelity without QEMU emulation overhead.</p>
-            </div>
-          </div>
-
-          <div class="pipeline-step">
-            <div class="step-num-badge">03</div>
-            <div class="step-content">
-              <h3>Automated AST & GCC 15 Transitive Header Patch Engine</h3>
-              <p>Applies automated patchsets across 290+ RocksDB C++ headers to guarantee full forward compatibility with GCC 14/15 and Clang 20 toolchains while maintaining Rust FFI link integrity.</p>
-            </div>
-          </div>
-
-          <div class="pipeline-step">
-            <div class="step-num-badge">04</div>
-            <div class="step-content">
-              <h3>Verification & ELF64 Packaging</h3>
-              <p>Compiles all 24 binaries via <code>cargo-install-all.sh</code>, audits dynamic ELF linkage against <code>glibc 2.31+</code> baseline, and packages into a compressed <code>.tar.bz2</code> distribution bundle.</p>
-            </div>
-          </div>
-
-          <div class="pipeline-step">
-            <div class="step-num-badge">05</div>
-            <div class="step-content">
-              <h3>Cryptographic Signing & SLSA Provenance Attestation</h3>
-              <p>Generates SHA256 checksums, Minisign/GPG signatures, and SLSA Level-3 build provenance attestations before publishing to GitHub Releases CDN and universal install endpoints.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 24 Binaries Tooling Matrix -->
-    <section class="section" id="binaries">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Complete Suite</span>
-          <h2 class="section-title">The 24 Native ARM64 Binaries</h2>
-          <p class="section-desc">
-            Explore the comprehensive suite of verified <code>aarch64-unknown-linux-gnu</code> executables included in every SolARM release bundle.
-          </p>
-        </div>
-
-        <div class="matrix-container">
-          <div class="matrix-toolbar">
-            <div class="search-input-box">
-              <span class="search-icon" aria-hidden="true">🔍</span>
-              <input type="text" id="matrix-search" class="search-input" placeholder="Search binary by name or function..." aria-label="Search binaries">
-            </div>
-            <span class="bin-badge" id="matrix-count" style="background: rgba(255, 255, 255, 0.08); color: #ffffff;">24 of 24 Binaries</span>
-          </div>
-
-          <div style="overflow-x: auto;">
-            <table class="matrix-table">
-              <thead>
-                <tr>
-                  <th>Binary Name</th>
-                  <th>Category</th>
-                  <th>Verification</th>
-                  <th>ELF Size</th>
-                  <th>Description</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody id="matrix-table-body">
-                <!-- Dynamically populated by app.js -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Engineering Devlog & Blog Section -->
-    <section class="section" id="devlog" style="background: rgba(12, 14, 24, 0.4);">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Engineering Field Notes & Devlog</span>
-          <h2 class="section-title">Building in Public: Hard-Won Systems Lessons</h2>
-          <p class="section-desc">
-            Deep-dive technical narratives, low-level FFI postmortems, and toolchain breakthroughs from our work on native Solana ARM64 infrastructure.
-          </p>
-        </div>
-
-        <div class="cards-grid-3" style="grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px;">
-          <!-- Devlog #01 -->
-          <article class="blog-card">
-            <div>
-              <div class="blog-meta">
-                <span class="blog-tag">Devlog #01</span>
-                <span>•</span>
-                <span>8 min read</span>
-              </div>
-              <h3 class="blog-title" style="margin: 12px 0;">
-                Compiling and Testing Anchor Smart Contracts with LiteSVM on aarch64 Linux
-              </h3>
-              <p class="blog-excerpt">
-                How we conquered corrupted 504MB toolchain blobs, resolved GCC 15 transitive header conflicts, matched raw Solana instruction signers, and achieved 0.15s test execution on Apple Silicon Linux.
-              </p>
-            </div>
-            <div class="blog-footer">
-              <span style="font-size: 0.82rem; color: var(--sol-cyan); font-weight: 600;">⚡ 150ms Test Victory</span>
-              <button class="btn btn-sm btn-primary" id="btn-open-devlog-modal">Read Article →</button>
-            </div>
-          </article>
-
-          <!-- Devlog #02 -->
-          <article class="blog-card">
-            <div>
-              <div class="blog-meta">
-                <span class="blog-tag">Devlog #02</span>
-                <span>•</span>
-                <span>6 min read</span>
-              </div>
-              <h3 class="blog-title" style="margin: 12px 0;">
-                Solving the GCC 15 C++ Transitive Header Decoupling in RocksDB FFI
-              </h3>
-              <p class="blog-excerpt">
-                Why modern C++ compilers broke <code>librocksdb-sys</code> in Rust, and how dual preprocessor guards (<code>#if defined(__cplusplus)</code>) allow clean AST linkage across 290 header files.
-              </p>
-            </div>
-            <div class="blog-footer">
-              <span style="font-size: 0.82rem; color: var(--sol-purple); font-weight: 600;">🛡️ AST Architecture</span>
-              <button class="btn btn-sm btn-secondary" onclick="document.getElementById('grant-modal').showModal()">View Architecture →</button>
-            </div>
-          </article>
-
-          <!-- Devlog #03 (NEW) -->
-          <article class="blog-card" style="border-top: 2px solid var(--sol-green);">
-            <div>
-              <div class="blog-meta">
-                <span class="blog-tag" style="background: rgba(20, 241, 149, 0.15); color: var(--sol-green);">Devlog #03 • SIMD</span>
-                <span>•</span>
-                <span>10 min read</span>
-              </div>
-              <h3 class="blog-title" style="margin: 12px 0;">
-                Decomposing Galois Fields: 5.58x Speedup to Solana Shredding via ARM NEON
-              </h3>
-              <p class="blog-excerpt">
-                How 4-bit nibble tables (<code>vqtbl1q_u8</code>) inside ARM NEON vector registers eliminated the silent scalar fallback in <code>reed-solomon-erasure</code>, delivering 230 MiB/s throughput with bit-exact wire parity.
-              </p>
-            </div>
-            <div class="blog-footer" style="flex-direction: column; align-items: stretch; gap: 10px;">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.82rem; color: var(--sol-green); font-weight: 600;">🚀 5.58x Latency Reduction</span>
-                <span style="font-size: 0.75rem; color: var(--text-muted);">Agave #9495</span>
-              </div>
-              <div style="display: flex; gap: 8px;">
-                <a href="https://gist.github.com/coad1024-cmd/55a066aafbdbad525a8311a19a88c676" target="_blank" rel="noreferrer" class="btn btn-sm btn-primary" style="flex: 1; text-align: center; text-decoration: none;">Read Gist →</a>
-                <a href="https://github.com/coad1024-cmd/solana-turbine-simd" target="_blank" rel="noreferrer" class="btn btn-sm btn-secondary" style="flex: 1; text-align: center; text-decoration: none;">GitHub Repo ↗</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Devlog #04 (NEW) -->
-          <article class="blog-card" style="border-top: 2px solid var(--sol-purple);">
-            <div>
-              <div class="blog-meta">
-                <span class="blog-tag" style="background: rgba(153, 69, 255, 0.15); color: var(--sol-purple);">Devlog #04 • SVM Tooling</span>
-                <span>•</span>
-                <span>8 min read</span>
-              </div>
-              <h3 class="blog-title" style="margin: 12px 0;">
-                Resolving the SBF 4,096-Byte Stack Limit in Anchor Dispatchers
-              </h3>
-              <p class="blog-excerpt">
-                Why complex instructions trigger 7,360-byte frame overflows in SBF, why composite <code>Box&lt;T&gt;</code> wrappers break Anchor's CPI codegen, and how field-level heap allocation keeps frames under 1,800 bytes.
-              </p>
-            </div>
-            <div class="blog-footer" style="flex-direction: column; align-items: stretch; gap: 10px;">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.82rem; color: var(--sol-purple); font-weight: 600;">🛡️ 4,096B Limit Bypassed</span>
-                <span style="font-size: 0.75rem; color: var(--text-muted);">Anchor #4941</span>
-              </div>
-              <div style="display: flex; gap: 8px;">
-                <a href="https://gist.github.com/coad1024-cmd/2b4dbe8ffb8931fed00e6e1bbc8f28e4" target="_blank" rel="noreferrer" class="btn btn-sm btn-primary" style="flex: 1; text-align: center; text-decoration: none;">Read Gist →</a>
-                <a href="https://github.com/coad1024-cmd/anchor-stack-spill" target="_blank" rel="noreferrer" class="btn btn-sm btn-secondary" style="flex: 1; text-align: center; text-decoration: none;">GitHub Repo ↗</a>
-              </div>
-            </div>
-          </article>
-
-          <!-- Devlog #05 (NEW) -->
-          <article class="blog-card" style="border-top: 2px solid var(--sol-cyan);">
-            <div>
-              <div class="blog-meta">
-                <span class="blog-tag" style="background: rgba(0, 194, 255, 0.15); color: var(--sol-cyan);">Devlog #05 • RPC & Consensus</span>
-                <span>•</span>
-                <span>9 min read</span>
-              </div>
-              <h3 class="blog-title" style="margin: 12px 0;">
-                Eliminating the 31-Slot RPC Leader Schedule Failure at Epoch Boundaries
-              </h3>
-              <p class="blog-excerpt">
-                How a code audit of <code>rpc.rs</code> uncovered the root cause of error -32602 across epoch boundaries, and how asynchronous background pre-caching restores 100% schedule availability.
-              </p>
-            </div>
-            <div class="blog-footer" style="flex-direction: column; align-items: stretch; gap: 10px;">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.82rem; color: var(--sol-cyan); font-weight: 600;">⚡ Zero -32602 Errors</span>
-                <span style="font-size: 0.75rem; color: var(--text-muted);">Agave #6845</span>
-              </div>
-              <div style="display: flex; gap: 8px;">
-                <a href="https://gist.github.com/coad1024-cmd/115929c67d57c5068e3b7e03940ef82c" target="_blank" rel="noreferrer" class="btn btn-sm btn-primary" style="flex: 1; text-align: center; text-decoration: none;">Read Gist →</a>
-                <a href="https://github.com/coad1024-cmd/solana-leader-precached" target="_blank" rel="noreferrer" class="btn btn-sm btn-secondary" style="flex: 1; text-align: center; text-decoration: none;">GitHub Repo ↗</a>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Public Ecosystem Roadmap & Strategic Deliverables -->
-    <section class="section" id="roadmap">
-      <div class="container">
-        <div class="grant-card">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
-            <div>
-              <span class="section-tag">Public Goods Roadmap</span>
-              <h2 style="font-size: 2.2rem; font-weight: 800; color: #ffffff; margin: 8px 0 12px;">What We Are Delivering for Solana</h2>
-              <p style="color: var(--text-secondary); max-width: 720px;">
-                Our multi-phase execution strategy to establish permanent, production-grade Linux ARM64 release infrastructure and developer tooling for the global Solana ecosystem.
-              </p>
-            </div>
-            
-            <button class="btn btn-primary" id="btn-open-proposal-modal">
-              <span>View Milestone Blueprint</span>
-            </button>
-          </div>
-
-          <div class="milestone-grid">
-            <div class="milestone-box">
-              <div class="milestone-header">
-                <span class="milestone-title">Phase 1: Agave v4.x Build Harness & SBF Toolchain Core</span>
-                <span class="milestone-budget">Core Milestone</span>
-              </div>
-              <p style="font-size: 0.88rem; color: var(--text-secondary);">
-                Porting empirical prototype patches to Anza Agave v4.x (<code>v4.2.2</code> / <code>v4.3.0</code>). Automated resolution of modern GCC 15 transitive headers and dual-mode C/C++ bindgen guards for zero-friction local compiles.
-              </p>
-            </div>
-
-            <div class="milestone-box">
-              <div class="milestone-header">
-                <span class="milestone-title">Phase 2: Automated CI/CD Release Matrix & 1-Line Installer</span>
-                <span class="milestone-budget">Infrastructure</span>
-              </div>
-              <p style="font-size: 0.88rem; color: var(--text-secondary);">
-                GitHub Actions matrix running on native AWS Graviton ARM64 runners. Automated SHA256 checksums, Minisign signatures, universal CDN distribution, and sub-5-second installation script.
-              </p>
-            </div>
-
-            <div class="milestone-box">
-              <div class="milestone-header">
-                <span class="milestone-title">Phase 3: Active Upstream Synchronization & 6-Month Maintenance</span>
-                <span class="milestone-budget">Maintenance</span>
-              </div>
-              <p style="font-size: 0.88rem; color: var(--text-secondary);">
-                Continuous tag synchronization for every upstream Anza release, glibc compatibility triage, security patching, and upstreaming PRs into Anza's core <code>agave-secondary</code> Buildkite pipeline.
-              </p>
-            </div>
-
-            <div class="milestone-box">
-              <div class="milestone-header">
-                <span class="milestone-title">Phase 4: Ecosystem Adoption, Cloud Templates & Guides</span>
-                <span class="milestone-budget">Adoption</span>
-              </div>
-              <p style="font-size: 0.88rem; color: var(--text-secondary);">
-                Targeting 2,500+ verified installations and 10+ prominent Solana developer templates, Anchor devcontainers, Gitpod ARM environments, and AWS Graviton developer guides.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- About Builder Section -->
-    <section class="section" id="about">
-      <div class="container">
-        <div class="section-header">
-          <span class="section-tag">Engineering Pedigree</span>
-          <h2 class="section-title">Built by Systems Engineers</h2>
-          <p class="section-desc">
-            Engineered by <strong>Hasher Nabi</strong> and <strong>SolARM</strong> — applying rigorous micro-architectural optimization, SIMD acceleration, and low-level Linux kernel FFI principles to the Solana ecosystem.
-          </p>
-        </div>
-
-        <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
-          <a href="https://github.com/coad1024-cmd" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">GitHub Profile</a>
-          <a href="https://t.me/dzuname" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Telegram: @dzuname</a>
-          <a href="https://x.com/Bonding_Curves" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">X: @Bonding_Curves</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Devlog Full Article Modal -->
-  <dialog id="devlog-modal" class="custom-modal" aria-labelledby="devlog-heading">
-    <div class="modal-header">
-      <h2 id="devlog-heading" style="font-size: 1.25rem; font-weight: 700; color: #ffffff;">Devlog #01: LiteSVM + Anchor on aarch64 Linux</h2>
-      <button id="btn-close-devlog-modal" class="modal-close-btn" aria-label="Close modal">✕</button>
-    </div>
-    
-    <div style="max-height: 70vh; overflow-y: auto; padding-right: 12px; font-size: 0.92rem; line-height: 1.7; color: var(--text-secondary);">
-      <p style="margin-bottom: 14px;">
-        If you are a Solana developer working on an ARM64 (<code>aarch64</code>) Linux machine (like Fedora Asahi on Apple Silicon), you've likely encountered serious friction. The standard <code>solana-test-validator</code> is heavy, and pre-built binaries don't support <code>aarch64</code> Linux out-of-the-box.
-      </p>
-
-      <h3 style="color: var(--sol-cyan); margin: 20px 0 8px;">The Goal: LiteSVM + Anchor</h3>
-      <p>
-        <strong>LiteSVM</strong> (by OtterSec) bypasses the heavy local validator to run smart contract tests purely in a simulated, native Rust environment, executing transactions in fractions of a second.
-      </p>
-
-      <h3 style="color: #ffffff; margin: 20px 0 8px;">Challenge 1: Dependency Conflicts</h3>
-      <p>
-        <code>litesvm 0.6</code> pulls Solana v2/v3 types, while Anchor v0.30.1 pulls v1/v2 types, leading to trait resolution conflicts.
-        <br><strong>The Fix:</strong> Pinned explicit Solana crates (<code>solana-keypair</code>, <code>solana-pubkey</code>, <code>solana-sdk</code>, <code>solana-program</code>) to <code>~2.0</code> to align perfectly with the LiteSVM 0.6 environment.
-      </p>
-
-      <h3 style="color: #ffffff; margin: 20px 0 8px;">Challenge 2: The aarch64 Toolchain Nightmare</h3>
-      <p>
-        Running <code>cargo build-sbf</code> attempts to fetch a 504MB pre-built archive that routinely corrupts on drops.
-        <br><strong>The Ultimate Fix:</strong> We compiled the Solana SBF toolchain locally, pre-fetching dependencies, patching <code>librocksdb-sys</code> GCC 15 headers, and producing a native toolchain that builds <code>counter.so</code> in 18 seconds!
-      </p>
-
-      <h3 style="color: #ffffff; margin: 20px 0 8px;">Challenge 3: Matching Contexts in LiteSVM</h3>
-      <p>
-        Raw LiteSVM instructions require passing exactly the signer accounts the Anchor contract expects:
-      </p>
-      <pre style="background: #08090f; padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.8rem; color: #38bdf8; overflow-x: auto;">let inc_ix = Instruction {
-    program_id: program_id(),
-    accounts: vec![
-        AccountMeta::new(counter_pubkey, false),
-        AccountMeta::new_readonly(payer_pubkey, true), // authority signer
-    ],
-    data: increment_discriminator().to_vec(),
-};</pre>
-
-      <h3 style="color: var(--sol-cyan); margin: 20px 0 8px;">Victory: 0.15s Execution</h3>
-      <pre style="background: #08090f; padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--sol-cyan); overflow-x: auto;">running 1 test
-test tests::test_counter_lifecycle ... ok
-test result: ok. 1 passed; 0 failed; finished in 0.15s</pre>
-      <p style="margin-top: 10px;">
-        A full smart contract deployment, initialization, and increment executed in <strong>150 milliseconds</strong>.
-      </p>
-    </div>
-  </dialog>
-
-  <!-- Interactive Milestone & Strategic Blueprint Modal -->
-  <dialog id="grant-modal" class="custom-modal" aria-labelledby="modal-heading">
-    <div class="modal-header">
-      <h2 id="modal-heading" style="font-size: 1.3rem; font-weight: 700; color: #ffffff;">Strategic Architecture & Milestone Blueprint</h2>
-      <button id="btn-close-modal" class="modal-close-btn" aria-label="Close modal">✕</button>
-    </div>
-    
-    <div style="max-height: 65vh; overflow-y: auto; padding-right: 12px; font-size: 0.92rem; line-height: 1.7; color: var(--text-secondary);">
-      <h3 style="color: #ffffff; margin: 16px 0 8px;">Executive Mission</h3>
-      <p>
-        In current Solana/Agave release infrastructure, pre-compiled release binaries exist only for x86_64, macOS, and Windows. <strong>Linux ARM64 is completely absent.</strong>
-      </p>
-      <p style="margin-top: 10px;">
-        Whenever developers launch AWS Graviton instances, Oracle Cloud Ampere A1 servers, Raspberry Pi 5 clusters, or Apple Silicon machines running Linux (Asahi), the official installer fails immediately with a <code>404 Not Found</code> error. Developers are forced to spend 45 to 90 minutes compiling from source.
-      </p>
-
-      <h3 style="color: #ffffff; margin: 20px 0 8px;">Proof of Work & Verification</h3>
-      <p>
-        SolARM has already built, tested, and packaged the entire 24-binary release suite (209 MB) on bare-metal physical ARM64 Linux hardware. The solution eliminates GCC 15 transitive header conflicts in <code>librocksdb-sys</code> and provides bit-for-bit verified ELF 64-bit executables.
-      </p>
-
-      <h3 style="color: #ffffff; margin: 20px 0 8px;">Strategic Deliverables Breakdown</h3>
-      <ul style="padding-left: 20px; margin-top: 8px;">
-        <li><strong>Phase 1:</strong> Agave v4.x Build Harness & SBF Toolchain Core (Beta)</li>
-        <li><strong>Phase 2:</strong> Automated CI/CD Pipeline & 1-Line Universal Installer</li>
-        <li><strong>Phase 3:</strong> 6 Months Active Maintenance & Upstream Anza Coordination</li>
-        <li><strong>Phase 4:</strong> Ecosystem Adoption & 2,500+ Verified Installations</li>
-      </ul>
-
-      <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
-        <span>Lead: <strong>Hasher Nabi (BCRG)</strong></span>
-        <button class="btn btn-primary btn-sm" onclick="copyText('https://github.com/coad1024-cmd/solana-arm64-linux')">Copy Repository Link</button>
+      <div class="table-wrapper">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Binary</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Size</th>
+              <th>Description</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="matrix-table-body">
+            <!-- Populated dynamically by app.js -->
+          </tbody>
+        </table>
       </div>
     </div>
-  </dialog>
+  </section>
+
+  <!-- Cloud Efficiency / ROI Calculator -->
+  <section class="section" id="calculator">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Economic Modeling</div>
+        <h2 class="section-title">Compute efficiency & cost optimization</h2>
+        <p class="section-description">
+          Evaluate the infrastructure savings achieved by deploying native aarch64 binaries instead of x86 emulation or full-source compilation.
+        </p>
+      </div>
+
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <div class="calc-control">
+            <div class="calc-label">
+              <span>Engineering Team Size</span>
+              <span id="calc-devs-val" class="bin-name">10 Developers</span>
+            </div>
+            <input type="range" id="calc-devs" class="calc-slider" min="1" max="100" value="10">
+          </div>
+
+          <div class="calc-control">
+            <div class="calc-label">
+              <span>Daily CI/CD Test Builds</span>
+              <span id="calc-builds-val" class="bin-name">25 Builds/Day</span>
+            </div>
+            <input type="range" id="calc-builds" class="calc-slider" min="5" max="200" value="25">
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0;">
+            Based on eliminating 45 minutes of compilation per build and migrating execution to AWS Graviton 3 instances (40% cost-performance improvement).
+          </p>
+        </div>
+
+        <div class="calc-results">
+          <div class="result-card">
+            <div class="result-label">Engineering Hours Saved Monthly</div>
+            <div class="result-val" id="calc-hours-saved">616 hrs / mo</div>
+          </div>
+          <div class="result-card">
+            <div class="result-label">Cloud Compute Budget Preserved</div>
+            <div class="result-val" id="calc-cloud-saved">$1,980 USD / mo</div>
+          </div>
+          <div class="result-card">
+            <div class="result-label">Estimated Carbon Reduction</div>
+            <div class="result-val" id="calc-co2-saved">111 kg CO₂e</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About & Engineering Standards -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Team & Standards</div>
+        <h2 class="section-title">About SolARM</h2>
+        <p class="section-description">
+          Founded on strict engineering discipline, mathematical proofs, and bare-metal validation.
+        </p>
+      </div>
+
+      <div class="about-box">
+        <div class="about-header">
+          <img src="assets/images/brand-logo.jpg" alt="Hasher Nabi" class="about-avatar">
+          <div class="about-title-group">
+            <h3>Hasher Nabi</h3>
+            <p>Director of Systems Engineering & Protocol Performance</p>
+          </div>
+        </div>
+        <p>
+          Hasher Nabi leads SolARM, focusing on low-level systems engineering, bare-metal hardware optimization, and cryptoeconomic mechanism design. SolARM was established to deliver rigorous, battle-tested performance engineering for decentralized networks requiring deterministic guarantees under high stress.
+        </p>
+        <div class="about-grid">
+          <div class="principle-card">
+            <h5>Empirical Verification</h5>
+            <p>Every performance claim is validated via Criterion microbenchmarks, differential fuzzing, and instruction-level profiling.</p>
+          </div>
+          <div class="principle-card">
+            <h5>Zero Artificial Abstraction</h5>
+            <p>We work directly at the hardware layer: ARM NEON vector lanes, cache line alignment, and zero-copy pointer manipulation.</p>
+          </div>
+          <div class="principle-card">
+            <h5>Deterministic Provenance</h5>
+            <p>All toolchains and binaries adhere to SLSA Level 3 standards with cryptographic checksum verification and auditable CI builds.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / Engagements -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Engagements</div>
+        <h2 class="section-title">Work with us</h2>
+        <p class="section-description">
+          We accept selective engagements with protocol foundations, validator fleets, high-frequency trading desks, and core infrastructure providers.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <div>
+          <h3>Inquire about an engineering engagement</h3>
+          <p>
+            Whether your project requires custom SIMD kernel engineering, runtime profiling to eliminate SBF compute-unit limits, or bare-metal aarch64 migration across validator fleets, reach out directly with your technical specification.
+          </p>
+          <a href="mailto:hasher.nabi@gmail.com?subject=SolARM%20Engineering%20Inquiry" class="btn btn-primary">
+            Send Engineering Inquiry
+          </a>
+        </div>
+        <div class="contact-channels">
+          <div class="contact-item">
+            <span class="contact-label">Email</span>
+            <span class="contact-value"><a href="mailto:hasher.nabi@gmail.com">hasher.nabi@gmail.com</a></span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Telegram</span>
+            <span class="contact-value"><a href="https://t.me/dzuname" target="_blank" rel="noopener noreferrer">@dzuname</a></span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">X / Twitter</span>
+            <span class="contact-value"><a href="https://x.com/Bonding_Curves" target="_blank" rel="noopener noreferrer">@Bonding_Curves</a></span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">GitHub Organization</span>
+            <span class="contact-value"><a href="https://github.com/coad1024-cmd" target="_blank" rel="noopener noreferrer">github.com/coad1024-cmd</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-            <img src="assets/images/brand-logo.jpg" alt="SolARM Logo" style="width: 32px; height: 32px; border-radius: 8px;">
-            <h3 style="margin-bottom: 0;">SolARM Commons</h3>
-          </div>
-          <p>
-            Building open-source, high-performance developer tooling and public goods for the Solana and Agave ecosystem.
-          </p>
-        </div>
-
-        <div class="footer-col">
-          <h4>Infrastructure</h4>
-          <ul>
-            <li><a href="#quickstart">Universal Installer</a></li>
-            <li><a href="#binaries">24 Native Binaries</a></li>
-            <li><a href="#devlog">LiteSVM Devlog</a></li>
-            <li><a href="#architecture">CI/CD Pipeline</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Ecosystem</h4>
-          <ul>
-            <li><a href="https://solana.com" target="_blank" rel="noopener noreferrer">Solana Foundation</a></li>
-            <li><a href="https://anza.xyz" target="_blank" rel="noopener noreferrer">Anza Agave</a></li>
-            <li><a href="https://github.com/otter-sec/litesvm" target="_blank" rel="noopener noreferrer">OtterSec LiteSVM</a></li>
-            <li><a href="#roadmap">Public Roadmap</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Community</h4>
-          <ul>
-            <li><a href="https://github.com/coad1024-cmd/solana-arm64-linux" target="_blank" rel="noopener noreferrer">GitHub Repository</a></li>
-            <li><a href="https://t.me/dzuname" target="_blank" rel="noopener noreferrer">Telegram: @dzuname</a></li>
-            <li><a href="https://x.com/Bonding_Curves" target="_blank" rel="noopener noreferrer">X: @Bonding_Curves</a></li>
-          </ul>
-        </div>
+    <div class="container footer-content">
+      <div>
+        <span>&copy; SolARM Systems Engineering. All rights reserved.</span>
       </div>
-
-      <div class="footer-bottom">
-        <span>© 2026 SolARM Commons. Open Source Public Goods released under Apache 2.0 / MIT.</span>
-        <span>Crafted for high-performance silicon by Hasher Nabi & BCRG</span>
+      <div class="footer-links">
+        <a href="https://github.com/coad1024-cmd/solana-arm64-linux" target="_blank" rel="noopener noreferrer">Toolchain</a>
+        <a href="https://gist.github.com/coad1024-cmd/d2c65b043dac6692ce2935d1d2d9b191" target="_blank" rel="noopener noreferrer">Research</a>
+        <a href="mailto:hasher.nabi@gmail.com">Contact</a>
       </div>
     </div>
   </footer>

@@ -43,5 +43,5 @@ Open `http://localhost:8080` in any modern web browser.
 ## 📜 License & Governance
 
 - **License:** Apache 2.0 / MIT Open Source Public Good
-- **Maintainer:** Hasher Nabi / Bonding Curve Research Group (BCRG)
+- **Maintainer:** Hasher Nabi / SolARM
 - **Grant Proposal:** Solana Foundation Developer Tooling Grant ($25,000 USD)

@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initToolingMatrix();
   initCalculator();
   initCopyButtons();
-  initModalDialog();
+  initModals();
 });
 
 // Terminal Tabs Logic
@@ -162,15 +162,9 @@ function initCalculator() {
     if (buildsVal) buildsVal.textContent = `${buildsPerDay} Builds/Day`;
 
     // Calculation constants
-    // Source compile time: 65 minutes vs SolARM prebuilt install: 0.1 minute (saving 1.08 hours per build)
-    // Working days per month: 22
     const totalBuildsPerMonth = (devs * 2) + (buildsPerDay * 22);
     const hoursSavedMonth = Math.round(totalBuildsPerMonth * 1.08);
-
-    // AWS Graviton pricing comparison vs x86 build instances: ~$45/dev/month + CI runner compute ($0.08/build)
     const dollarsSavedMonth = Math.round((hoursSavedMonth * 2.8) + (totalBuildsPerMonth * 0.45));
-
-    // Carbon reduction (approx 0.18 kg CO2e per compute hour eliminated)
     const co2SavedKg = Math.round(hoursSavedMonth * 0.18);
 
     if (hoursSavedElem) hoursSavedElem.textContent = `${hoursSavedMonth.toLocaleString()} hrs / mo`;
@@ -200,7 +194,7 @@ function initCopyButtons() {
 
 window.copyText = function(text) {
   navigator.clipboard.writeText(text).then(() => {
-    showToast(`Copied to clipboard: "${text.length > 35 ? text.substring(0, 35) + '...' : text}"`);
+    showToast(`Copied: "${text.length > 35 ? text.substring(0, 35) + '...' : text}"`);
   }).catch(err => {
     console.error('Clipboard copy failed', err);
   });
@@ -231,21 +225,39 @@ function showToast(message) {
   }, 2800);
 }
 
-// Modal Dialog for Grant Proposal Full View
-function initModalDialog() {
-  const openBtn = document.getElementById('btn-open-proposal-modal');
-  const modal = document.getElementById('grant-modal');
-  const closeBtn = document.getElementById('btn-close-modal');
+// Modal Dialog Management
+function initModals() {
+  // Roadmap & Blueprint Modal
+  const openBlueprintBtns = document.querySelectorAll('#btn-open-proposal-modal');
+  const blueprintModal = document.getElementById('grant-modal');
+  const closeBlueprintBtn = document.getElementById('btn-close-modal');
 
-  if (openBtn && modal) {
-    openBtn.addEventListener('click', () => {
-      modal.showModal();
+  openBlueprintBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (blueprintModal) blueprintModal.showModal();
+    });
+  });
+
+  if (closeBlueprintBtn && blueprintModal) {
+    closeBlueprintBtn.addEventListener('click', () => {
+      blueprintModal.close();
     });
   }
 
-  if (closeBtn && modal) {
-    closeBtn.addEventListener('click', () => {
-      modal.close();
+  // Devlog Modal
+  const openDevlogBtn = document.getElementById('btn-open-devlog-modal');
+  const devlogModal = document.getElementById('devlog-modal');
+  const closeDevlogBtn = document.getElementById('btn-close-devlog-modal');
+
+  if (openDevlogBtn && devlogModal) {
+    openDevlogBtn.addEventListener('click', () => {
+      devlogModal.showModal();
+    });
+  }
+
+  if (closeDevlogBtn && devlogModal) {
+    closeDevlogBtn.addEventListener('click', () => {
+      devlogModal.close();
     });
   }
 }

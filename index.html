@@ -47,12 +47,12 @@
       <nav aria-label="Main Navigation">
         <ul class="nav-links">
           <li><a href="#quickstart">Quickstart</a></li>
-          <li><a href="#impact">Ecosystem Impact</a></li>
+          <li><a href="#impact">Impact</a></li>
           <li><a href="#calculator">ROI Calculator</a></li>
           <li><a href="#architecture">Architecture</a></li>
           <li><a href="#binaries">24 Binaries</a></li>
-          <li><a href="#litesvm">LiteSVM Guide</a></li>
-          <li><a href="#grant">Grant Proposal</a></li>
+          <li><a href="#devlog">Devlog</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
         </ul>
       </nav>
 
@@ -93,10 +93,10 @@
                 <span>Install in 5 Seconds</span>
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </a>
-              <button class="btn btn-secondary" id="btn-open-proposal-modal">
+              <a href="#roadmap" class="btn btn-secondary">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                <span>Read Grant Proposal ($25K)</span>
-              </button>
+                <span>Execution Roadmap</span>
+              </a>
             </div>
           </div>
 
@@ -418,98 +418,121 @@ solana-cli 1.18.26 (client:SolanaLabs / Agave Native aarch64)</pre>
       </div>
     </section>
 
-    <!-- LiteSVM + Anchor Section -->
-    <section class="section" id="litesvm" style="background: rgba(12, 14, 24, 0.4);">
+    <!-- Engineering Devlog & Blog Section -->
+    <section class="section" id="devlog" style="background: rgba(12, 14, 24, 0.4);">
       <div class="container">
         <div class="section-header">
-          <span class="section-tag">Ultra-Fast Testing</span>
-          <h2 class="section-title">LiteSVM + Anchor on ARM64 Linux</h2>
+          <span class="section-tag">Engineering Field Notes & Devlog</span>
+          <h2 class="section-title">Building in Public: Hard-Won Systems Lessons</h2>
           <p class="section-desc">
-            Experience sub-second smart contract testing without running heavy validator daemons.
+            Deep-dive technical narratives, low-level FFI postmortems, and toolchain breakthroughs from our work on native Solana ARM64 infrastructure.
           </p>
         </div>
 
         <div class="cards-grid-3" style="grid-template-columns: 1fr 1fr;">
-          <div class="feature-card" style="padding: 28px;">
-            <h3 style="color: #ffffff; margin-bottom: 12px; font-size: 1.15rem;">1. Compile with Native SBF Toolchain</h3>
-            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 16px;">
-              Compile your Anchor program directly to a native SBF shared object (<code>.so</code>) using our ARM64 toolchain:
-            </p>
-            <pre style="background: #08090f; padding: 14px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: #a5b4fc; overflow-x: auto;">cargo build-sbf --manifest-path programs/counter/Cargo.toml</pre>
-          </div>
+          <article class="blog-card">
+            <div>
+              <div class="blog-meta">
+                <span class="blog-tag">Devlog #01</span>
+                <span>•</span>
+                <span>Sep 2026</span>
+                <span>•</span>
+                <span>8 min read</span>
+              </div>
+              <h3 class="blog-title" style="margin: 12px 0;">
+                Compiling and Testing Anchor Smart Contracts with LiteSVM on aarch64 Linux
+              </h3>
+              <p class="blog-excerpt">
+                How we conquered corrupted 504MB toolchain blobs, resolved GCC 15 transitive header conflicts, matched raw Solana instruction signers, and achieved 0.15s test execution on Apple Silicon Linux.
+              </p>
+            </div>
+            <div class="blog-footer">
+              <span style="font-size: 0.82rem; color: var(--sol-cyan); font-weight: 600;">⚡ 150ms Test Victory</span>
+              <button class="btn btn-sm btn-primary" id="btn-open-devlog-modal">Read Article →</button>
+            </div>
+          </article>
 
-          <div class="feature-card" style="padding: 28px;">
-            <h3 style="color: #ffffff; margin-bottom: 12px; font-size: 1.15rem;">2. Load & Execute in Memory (0.15s)</h3>
-            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 16px;">
-              LiteSVM loads the <code>.so</code> bytecode and executes instructions in fractions of a second:
-            </p>
-            <pre style="background: #08090f; padding: 14px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.82rem; color: var(--sol-cyan); overflow-x: auto;">let mut svm = LiteSVM::new();
-svm.add_program(program_id(), include_bytes!("../counter.so"));
-let res = svm.send_transaction(tx);
-assert!(res.is_ok()); // Done in 150ms!</pre>
-          </div>
+          <article class="blog-card">
+            <div>
+              <div class="blog-meta">
+                <span class="blog-tag">Devlog #02</span>
+                <span>•</span>
+                <span>Sep 2026</span>
+                <span>•</span>
+                <span>6 min read</span>
+              </div>
+              <h3 class="blog-title" style="margin: 12px 0;">
+                Solving the GCC 15 C++ Transitive Header Decoupling in RocksDB FFI
+              </h3>
+              <p class="blog-excerpt">
+                Why modern C++ compilers broke <code>librocksdb-sys</code> in Rust, and how dual preprocessor guards (<code>#if defined(__cplusplus)</code>) allow clean AST linkage across 290 header files.
+              </p>
+            </div>
+            <div class="blog-footer">
+              <span style="font-size: 0.82rem; color: var(--sol-purple); font-weight: 600;">🛡️ AST Architecture</span>
+              <button class="btn btn-sm btn-secondary" onclick="document.getElementById('grant-modal').showModal()">View Architecture →</button>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- Solana Foundation Grant Proposal Section -->
-    <section class="section" id="grant">
+    <!-- Public Ecosystem Roadmap & Strategic Deliverables -->
+    <section class="section" id="roadmap">
       <div class="container">
         <div class="grant-card">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
             <div>
-              <span class="section-tag">Ecosystem Public Good</span>
-              <h2 style="font-size: 2.2rem; font-weight: 800; color: #ffffff; margin: 8px 0 12px;">Solana Foundation Grant Proposal</h2>
-              <p style="color: var(--text-secondary); max-width: 680px;">
-                <strong>Project:</strong> Agave ARM64 Automated Native Linux Release Infrastructure <br>
-                <strong>Applicant:</strong> Hasher Nabi (Bonding Curve Research Group / Systems Architecture Lab) <br>
-                <strong>Total Requested:</strong> $25,000 USD across four milestone-driven tranches.
+              <span class="section-tag">Public Goods Roadmap</span>
+              <h2 style="font-size: 2.2rem; font-weight: 800; color: #ffffff; margin: 8px 0 12px;">What We Are Delivering for Solana</h2>
+              <p style="color: var(--text-secondary); max-width: 720px;">
+                Our multi-phase execution strategy to establish permanent, production-grade Linux ARM64 release infrastructure and developer tooling for the global Solana ecosystem.
               </p>
             </div>
             
-            <button class="btn btn-primary" onclick="document.getElementById('grant-modal').showModal()">
-              <span>View Full Dossier</span>
+            <button class="btn btn-primary" id="btn-open-proposal-modal">
+              <span>View Milestone Blueprint</span>
             </button>
           </div>
 
           <div class="milestone-grid">
             <div class="milestone-box">
               <div class="milestone-header">
-                <span class="milestone-title">Milestone 1: Agave v4.x Build Harness & SBF Toolchain</span>
-                <span class="milestone-budget">$6,000 USD</span>
+                <span class="milestone-title">Phase 1: Agave v4.x Build Harness & SBF Toolchain Core</span>
+                <span class="milestone-budget">Core Milestone</span>
               </div>
               <p style="font-size: 0.88rem; color: var(--text-secondary);">
-                Porting empirical prototype patches to Anza Agave v4.x (<code>v4.2.2</code> / <code>v4.3.0</code>). Automated resolution of modern GCC 15 transitive headers and dual-mode C/C++ bindgen guards.
+                Porting empirical prototype patches to Anza Agave v4.x (<code>v4.2.2</code> / <code>v4.3.0</code>). Automated resolution of modern GCC 15 transitive headers and dual-mode C/C++ bindgen guards for zero-friction local compiles.
               </p>
             </div>
 
             <div class="milestone-box">
               <div class="milestone-header">
-                <span class="milestone-title">Milestone 2: Automated CI/CD Release Pipeline</span>
-                <span class="milestone-budget">$6,000 USD</span>
+                <span class="milestone-title">Phase 2: Automated CI/CD Release Matrix & 1-Line Installer</span>
+                <span class="milestone-budget">Infrastructure</span>
               </div>
               <p style="font-size: 0.88rem; color: var(--text-secondary);">
-                GitHub Actions matrix on native ARM64 runners. Automated SHA256 checksums, Minisign signatures, universal CDN deployment, and sub-5-second installation script.
+                GitHub Actions matrix running on native AWS Graviton ARM64 runners. Automated SHA256 checksums, Minisign signatures, universal CDN distribution, and sub-5-second installation script.
               </p>
             </div>
 
             <div class="milestone-box">
               <div class="milestone-header">
-                <span class="milestone-title">Milestone 3: Active Ecosystem Maintenance (6 Months)</span>
-                <span class="milestone-budget">$8,000 USD</span>
+                <span class="milestone-title">Phase 3: Active Upstream Synchronization & 6-Month Maintenance</span>
+                <span class="milestone-budget">Maintenance</span>
               </div>
               <p style="font-size: 0.88rem; color: var(--text-secondary);">
-                Continuous tag synchronization for every upstream Anza release, glibc compatibility triage, security patching, and upstreaming PRs into <code>agave-secondary</code>.
+                Continuous tag synchronization for every upstream Anza release, glibc compatibility triage, security patching, and upstreaming PRs into Anza's core <code>agave-secondary</code> Buildkite pipeline.
               </p>
             </div>
 
             <div class="milestone-box">
               <div class="milestone-header">
-                <span class="milestone-title">Milestone 4: User Adoption & Cloud Integrations</span>
-                <span class="milestone-budget">$5,000 USD</span>
+                <span class="milestone-title">Phase 4: Ecosystem Adoption, Cloud Templates & Guides</span>
+                <span class="milestone-budget">Adoption</span>
               </div>
               <p style="font-size: 0.88rem; color: var(--text-secondary);">
-                Milestone target of 2,500+ verified installations and 10+ prominent Solana developer templates, Anchor devcontainers, and AWS Graviton developer guide integrations.
+                Targeting 2,500+ verified installations and 10+ prominent Solana developer templates, Anchor devcontainers, Gitpod ARM environments, and AWS Graviton developer guides.
               </p>
             </div>
           </div>
@@ -537,17 +560,69 @@ assert!(res.is_ok()); // Done in 150ms!</pre>
     </section>
   </main>
 
-  <!-- Interactive Grant Proposal Modal -->
+  <!-- Devlog Full Article Modal -->
+  <dialog id="devlog-modal" class="custom-modal" aria-labelledby="devlog-heading">
+    <div class="modal-header">
+      <h2 id="devlog-heading" style="font-size: 1.25rem; font-weight: 700; color: #ffffff;">Devlog #01: LiteSVM + Anchor on aarch64 Linux</h2>
+      <button id="btn-close-devlog-modal" class="modal-close-btn" aria-label="Close modal">✕</button>
+    </div>
+    
+    <div style="max-height: 70vh; overflow-y: auto; padding-right: 12px; font-size: 0.92rem; line-height: 1.7; color: var(--text-secondary);">
+      <p style="margin-bottom: 14px;">
+        If you are a Solana developer working on an ARM64 (<code>aarch64</code>) Linux machine (like Fedora Asahi on Apple Silicon), you've likely encountered serious friction. The standard <code>solana-test-validator</code> is heavy, and pre-built binaries don't support <code>aarch64</code> Linux out-of-the-box.
+      </p>
+
+      <h3 style="color: var(--sol-cyan); margin: 20px 0 8px;">The Goal: LiteSVM + Anchor</h3>
+      <p>
+        <strong>LiteSVM</strong> (by OtterSec) bypasses the heavy local validator to run smart contract tests purely in a simulated, native Rust environment, executing transactions in fractions of a second.
+      </p>
+
+      <h3 style="color: #ffffff; margin: 20px 0 8px;">Challenge 1: Dependency Conflicts</h3>
+      <p>
+        <code>litesvm 0.6</code> pulls Solana v2/v3 types, while Anchor v0.30.1 pulls v1/v2 types, leading to trait resolution conflicts.
+        <br><strong>The Fix:</strong> Pinned explicit Solana crates (<code>solana-keypair</code>, <code>solana-pubkey</code>, <code>solana-sdk</code>, <code>solana-program</code>) to <code>~2.0</code> to align perfectly with the LiteSVM 0.6 environment.
+      </p>
+
+      <h3 style="color: #ffffff; margin: 20px 0 8px;">Challenge 2: The aarch64 Toolchain Nightmare</h3>
+      <p>
+        Running <code>cargo build-sbf</code> attempts to fetch a 504MB pre-built archive that routinely corrupts on drops.
+        <br><strong>The Ultimate Fix:</strong> We compiled the Solana SBF toolchain locally, pre-fetching dependencies, patching <code>librocksdb-sys</code> GCC 15 headers, and producing a native toolchain that builds <code>counter.so</code> in 18 seconds!
+      </p>
+
+      <h3 style="color: #ffffff; margin: 20px 0 8px;">Challenge 3: Matching Contexts in LiteSVM</h3>
+      <p>
+        Raw LiteSVM instructions require passing exactly the signer accounts the Anchor contract expects:
+      </p>
+      <pre style="background: #08090f; padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.8rem; color: #38bdf8; overflow-x: auto;">let inc_ix = Instruction {
+    program_id: program_id(),
+    accounts: vec![
+        AccountMeta::new(counter_pubkey, false),
+        AccountMeta::new_readonly(payer_pubkey, true), // authority signer
+    ],
+    data: increment_discriminator().to_vec(),
+};</pre>
+
+      <h3 style="color: var(--sol-cyan); margin: 20px 0 8px;">Victory: 0.15s Execution</h3>
+      <pre style="background: #08090f; padding: 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--sol-cyan); overflow-x: auto;">running 1 test
+test tests::test_counter_lifecycle ... ok
+test result: ok. 1 passed; 0 failed; finished in 0.15s</pre>
+      <p style="margin-top: 10px;">
+        A full smart contract deployment, initialization, and increment executed in <strong>150 milliseconds</strong>.
+      </p>
+    </div>
+  </dialog>
+
+  <!-- Interactive Milestone & Strategic Blueprint Modal -->
   <dialog id="grant-modal" class="custom-modal" aria-labelledby="modal-heading">
     <div class="modal-header">
-      <h2 id="modal-heading" style="font-size: 1.3rem; font-weight: 700; color: #ffffff;">Solana Foundation Grant Proposal Dossier</h2>
+      <h2 id="modal-heading" style="font-size: 1.3rem; font-weight: 700; color: #ffffff;">Strategic Architecture & Milestone Blueprint</h2>
       <button id="btn-close-modal" class="modal-close-btn" aria-label="Close modal">✕</button>
     </div>
     
     <div style="max-height: 65vh; overflow-y: auto; padding-right: 12px; font-size: 0.92rem; line-height: 1.7; color: var(--text-secondary);">
-      <h3 style="color: #ffffff; margin: 16px 0 8px;">Executive Summary</h3>
+      <h3 style="color: #ffffff; margin: 16px 0 8px;">Executive Mission</h3>
       <p>
-        In the current Solana/Agave release infrastructure, pre-compiled release binaries exist only for <code>x86_64-unknown-linux-gnu</code>, <code>aarch64-apple-darwin</code> (macOS), and Windows. <strong>Linux ARM64 is completely absent.</strong>
+        In current Solana/Agave release infrastructure, pre-compiled release binaries exist only for x86_64, macOS, and Windows. <strong>Linux ARM64 is completely absent.</strong>
       </p>
       <p style="margin-top: 10px;">
         Whenever developers launch AWS Graviton instances, Oracle Cloud Ampere A1 servers, Raspberry Pi 5 clusters, or Apple Silicon machines running Linux (Asahi), the official installer fails immediately with a <code>404 Not Found</code> error. Developers are forced to spend 45 to 90 minutes compiling from source.
@@ -555,19 +630,19 @@ assert!(res.is_ok()); // Done in 150ms!</pre>
 
       <h3 style="color: #ffffff; margin: 20px 0 8px;">Proof of Work & Verification</h3>
       <p>
-        Unlike theoretical proposals, SolARM has already built, tested, and packaged the entire 24-binary release suite (209 MB) on bare-metal physical ARM64 Linux hardware. The solution eliminates GCC 15 transitive header conflicts in <code>librocksdb-sys</code> and provides bit-for-bit verified ELF 64-bit executables.
+        SolARM has already built, tested, and packaged the entire 24-binary release suite (209 MB) on bare-metal physical ARM64 Linux hardware. The solution eliminates GCC 15 transitive header conflicts in <code>librocksdb-sys</code> and provides bit-for-bit verified ELF 64-bit executables.
       </p>
 
-      <h3 style="color: #ffffff; margin: 20px 0 8px;">Budget & Milestones Overview</h3>
+      <h3 style="color: #ffffff; margin: 20px 0 8px;">Strategic Deliverables Breakdown</h3>
       <ul style="padding-left: 20px; margin-top: 8px;">
-        <li><strong>Milestone 1 ($6,000 USD):</strong> Agave v4.x Build Harness & SBF Toolchain (Beta)</li>
-        <li><strong>Milestone 2 ($6,000 USD):</strong> Automated CI/CD Pipeline & 1-Line Universal Installer</li>
-        <li><strong>Milestone 3 ($8,000 USD):</strong> 6 Months Active Maintenance & Upstream Anza Coordination</li>
-        <li><strong>Milestone 4 ($5,000 USD):</strong> Ecosystem Adoption & 2,500+ Verified Installations</li>
+        <li><strong>Phase 1:</strong> Agave v4.x Build Harness & SBF Toolchain Core (Beta)</li>
+        <li><strong>Phase 2:</strong> Automated CI/CD Pipeline & 1-Line Universal Installer</li>
+        <li><strong>Phase 3:</strong> 6 Months Active Maintenance & Upstream Anza Coordination</li>
+        <li><strong>Phase 4:</strong> Ecosystem Adoption & 2,500+ Verified Installations</li>
       </ul>
 
       <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
-        <span>Contact: <strong>hasher.nabi@gmail.com</strong></span>
+        <span>Lead: <strong>Hasher Nabi (BCRG)</strong></span>
         <button class="btn btn-primary btn-sm" onclick="copyText('https://github.com/coad1024-cmd/solana-arm64-linux')">Copy Repository Link</button>
       </div>
     </div>
@@ -592,7 +667,7 @@ assert!(res.is_ok()); // Done in 150ms!</pre>
           <ul>
             <li><a href="#quickstart">Universal Installer</a></li>
             <li><a href="#binaries">24 Native Binaries</a></li>
-            <li><a href="#litesvm">LiteSVM Framework</a></li>
+            <li><a href="#devlog">LiteSVM Devlog</a></li>
             <li><a href="#architecture">CI/CD Pipeline</a></li>
           </ul>
         </div>
@@ -603,7 +678,7 @@ assert!(res.is_ok()); // Done in 150ms!</pre>
             <li><a href="https://solana.com" target="_blank" rel="noopener noreferrer">Solana Foundation</a></li>
             <li><a href="https://anza.xyz" target="_blank" rel="noopener noreferrer">Anza Agave</a></li>
             <li><a href="https://github.com/otter-sec/litesvm" target="_blank" rel="noopener noreferrer">OtterSec LiteSVM</a></li>
-            <li><a href="#grant">Grant Dossier</a></li>
+            <li><a href="#roadmap">Public Roadmap</a></li>
           </ul>
         </div>
 

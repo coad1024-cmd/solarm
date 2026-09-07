@@ -1,94 +1,56 @@
-# How I Accidentally Built "SolARM": The Absurd, Painful, and Glorious Journey of Compiling Solana on Linux ARM64
+# Notes on Compiling Solana on Linux ARM64 (and how SolARM came together)
 
-*By Hasher Nabi — September 2026*
+*Hasher Nabi — September 2026*
 
 ---
 
-### Prologue: The 404 That Refused to Die
-
-It started with the most innocent, mundane desire known to modern software engineering: I wanted to spin up a local Solana test validator on my Apple Silicon machine running Asahi Linux.
-
-I opened my terminal, pulled up the official Solana documentation, copied the canonical one-line installer command, and hit Enter with the unearned confidence of someone who had never tried to cross-compile a distributed consensus engine:
+I run Fedora Asahi on an Apple Silicon machine. A few days ago, I needed to spin up a local Solana test validator to test an on-chain program. I ran the standard install command from the official docs:
 
 ```bash
 sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
 ```
 
-A few seconds passed. A curl progress bar flickered. And then:
+A few seconds later, `curl` returned a 404.
 
-```text
-curl: (22) The requested URL returned error: 404 Not Found
-```
+It turns out neither Solana Labs nor Anza has ever published precompiled release binaries for Linux ARM64 (`aarch64-unknown-linux-gnu`). macOS ARM64 has had official releases for years, but on Linux ARM64—whether you are on an Asahi laptop, an AWS Graviton instance, or an Oracle Ampere server—there are no binaries. If you want the Solana CLI tools on ARM64 Linux, you have to compile them from source yourself.
 
-Not a deprecation warning. Not an architecture-detection notice asking me to build from source. Just a cold, blank, existential `404`.
+I figured compiling it would take an hour or two. Clone the Agave repo, run cargo install, wait for the crates to finish, and get back to work. It ended up taking two days of chasing compiler quirks, preprocessor edge cases, and dynamic linker version constraints across four Linux distributions. 
 
-I paused. It is the year 2026. AWS Graviton accounts for a massive chunk of all cloud compute. Oracle Cloud gives away 4-core Ampere ARM instances like candy. Half the software engineers on Earth carry an ARM-based laptop in their backpacks. And Asahi Linux on Apple Silicon is so polished that it’s basically an everyday workstation.
-
-Yet if you run Linux on an ARM chip, the official release pipeline of the fastest blockchain in Web3 basically looks at your CPU architecture (`aarch64-unknown-linux-gnu`) and replies: *"We don't know her."*
-
-Naturally, my brain took the bait:
-*"How hard could it possibly be? It’s just Rust. I’ll clone the repo, run `cargo build --release`, grab a coffee, and be done by lunch."*
-
-Reader: It was not done by lunch. 
-
-What followed was a 48-hour odyssey through modular Perl packages, GCC 15 breaking 30 years of transitive C++ header traditions, Clang bindgen having an existential crisis, a 10-byte network standoff against crates.io, and a deep-dive into the one-way time machine that is GNU `glibc`.
-
-Here is the story of how **SolARM** was born.
+Here is what went wrong along the way, how we resolved it, and what we learned about Linux distribution targets in the process.
 
 ---
 
-### Act I: The Perl Ambush and The C++ Header Decapitation
+### 1. The GCC 15 and RocksDB Header Problem
 
-I cloned `anza-xyz/agave` (tag `v4.2.2`). 
+I cloned `anza-xyz/agave` at tag `v4.2.2`, pinned the toolchain to Rust 1.96.1 (as specified in `rust-toolchain.toml`), and ran `scripts/cargo-install-all.sh`.
 
-I checked the pinned compiler in `rust-toolchain.toml`: **Rust 1.96.1**. Installed.
-I fired off the build script: `./scripts/cargo-install-all.sh .`
+The first failure was trivial: vendored `openssl-sys` failed during `./Configure` because it could not find `FindBin.pm`. Fedora does not include core Perl modules in minimal base installs anymore, so `dnf install perl-FindBin perl-core` got past that.
 
-Four minutes in, the build exploded.
+The second failure was substantially more stubborn:
 
-#### Trap #1: Where is my FindBin?
-The vendored `openssl-sys` build script screeched to a halt:
-```text
-Can't locate FindBin.pm in @INC (you may need to install the FindBin module)
-```
-As it turns out, modern Fedora treats Perl like a modular IKEA bookcase. It doesn't ship core Perl modules by default anymore. A quick `dnf install perl-FindBin perl-core` fixed that. Minor speedbump. I smiled. *We're cruising.*
-
-Then came RocksDB.
-
-#### Trap #2: GCC 15 Woke Up and Chose Violence
-Suddenly, the terminal unleashed a crimson tidal wave of compiler fury across `librocksdb-sys`:
 ```text
 error: ‘uint64_t’ does not name a type
 error: ‘uint32_t’ does not name a type
 error: ‘int64_t’ does not name a type
 ```
-I stared at the screen in disbelief. `uint64_t`? The fundamental unsigned 64-bit integer that has been part of computing since the dawn of the C99 standard? *GCC doesn't know what an unsigned integer is?!*
 
-Here is the historical comedy: For decades, standard C++ library headers like `<vector>`, `<memory>`, and `<string>` quietly, transitively included `<cstdint>`. Developers writing C++ for 15 years got lazy and never explicitly included `<cstdint>` because `<vector>` did it for them.
+The error came from deep inside `librocksdb-sys`—specifically files like `trace_record.cc` and `blob_file_meta.cc`.
 
-Then along came **GCC 15**. In a noble quest to speed up compilation times and enforce strict ISO C++ standards, the GCC maintainers ruthlessly purged these transitive header inclusions. If you didn't explicitly `#include <cstdint>`, GCC 15 essentially said: *"I have never seen this integer in my life."*
+This happened because our host was running GCC 15. In earlier GCC versions, standard library headers like `<vector>` and `<memory>` transitively included `<cstdint>`. Decades of C++ code, including RocksDB's C++ bindings, relied on this implicit include without ever explicitly declaring `#include <cstdint>`. In GCC 15, the maintainers cleaned up standard library headers to improve parse times and meet ISO standards, which dropped `<cstdint>` from `<vector>`.
 
-And RocksDB—all 10 years and half a million lines of it—depended on that transitive inclusion across hundreds of internal files.
+As a result, GCC 15 did not recognize basic fixed-width integer types in dozens of RocksDB files.
 
----
+The immediate reaction was to prepend `#include <cstdint>` to `rocksdb/c.h`. That solved the C++ compile step, but immediately broke Rust's `bindgen`:
 
-### Act II: The Bindgen Trap and The Great AST Inception
-
-"Easy," I thought. "I'll write a bash one-liner to inject `#include <cstdint>` into the top of every `.h` file in the RocksDB source tree."
-
-I did that. I started the build again.
-
-Ten seconds later, Rust's `bindgen` (the FFI code generator) completely panicked:
 ```text
-/home/hash/.cargo/git/checkouts/rust-rocksdb-.../include/rocksdb/c.h:1:10: 
 fatal error: 'cstdint' file not found
 ```
 
-Here was the trap: `rocksdb/c.h` is a **pure C header**, used both by C++ and by Rust's FFI binding generator. Rust’s `bindgen` invokes Clang in pure C mode. And in pure C, `<cstdint>` is not a valid header—C uses `<stdint.h>`.
+`rocksdb/c.h` is a shared header. When Rust's `bindgen` parses it to generate FFI bindings, Clang runs in pure C mode. In pure C, `<cstdint>` does not exist; the standard header is `<stdint.h>`.
 
-By blindly adding `<cstdint>`, I had cured the C++ compiler by giving the C parser a heart attack.
+Adding `<cstdint>` fixed the C++ build and broke the C parser. 
 
-The solution had to be elegant and surgical. I wrote a Python AST traversal script (`scripts/apply-patches.sh`) that audited every header across the Agave tree, Cargo checkouts, and registry caches, injecting dual preprocessor safety guards:
+To fix both simultaneously without modifying upstream code by hand across dozens of dependencies, we wrote a small Python script (`scripts/apply-patches.sh`) to traverse the source tree, Cargo git checkouts, and registry caches. It injects dual preprocessor guards into any header relying on fixed-width types:
 
 ```c
 #if defined(__cplusplus)
@@ -98,17 +60,14 @@ The solution had to be elegant and surgical. I wrote a Python AST traversal scri
 #endif
 ```
 
-It swept through **1,052 header files**. When it finished, RocksDB compiled in absolute silence. 
-
-Round 1: Human 1, Toolchain 0.
+The script patched 1,052 headers across the workspace and cargo cache. RocksDB compiled cleanly on the next attempt.
 
 ---
 
-### Act III: The Ghost of `libclang.so`
+### 2. Missing `libclang.so` in User Space
 
-With RocksDB tamed, the compiler surged forward. Hundreds of Solana crates were compiling in parallel: `solana-program`, `solana-runtime`, `solana-ledger`, `solana-gossip`...
+Once RocksDB compiled, the build progressed through several hundred crates until `clang-sys` failed:
 
-And then, right around the 600th crate:
 ```text
 thread 'main' panicked at clang-sys-1.2.2/build/dynamic.rs:211:45:
 called `Result::unwrap()` on an `Err` value: 
@@ -116,144 +75,102 @@ called `Result::unwrap()` on an `Err` value:
 set the `LIBCLANG_PATH` environment variable..."
 ```
 
-I checked my system:
-`which clang` $\rightarrow$ `/usr/bin/clang` (Clang 21).
-`ls /usr/lib64/libclang*` $\rightarrow$ `/usr/lib64/libclang.so.21.1` exists!
+Clang was installed on the system, and `/usr/lib64/libclang.so.21.1` existed. But `clang-sys` searches specifically for `libclang.so` or `libclang-*.so`. 
 
-Why was `clang-sys` weeping?
+On RPM distributions (Fedora, RHEL), the runtime library package only installs the soname (`libclang.so.21.1`). The unversioned symlink `libclang.so` is part of `clang-devel`. In environments without root or `sudo` access, you cannot run `dnf install clang-devel`.
 
-Because on Red Hat and Fedora, the shared library package only ships the *versioned* library (`libclang.so.21.1`). The unversioned symlink (`libclang.so`) is only installed if you have root and install `clang-devel`. But in many containerized or unprivileged CI environments, you don't have passwordless sudo.
+Instead of requiring root privileges, we added a small check in the build script that finds the installed versioned `.so` and creates a local symlink in `./lib`:
 
-Rather than giving up or hacking system directories, we engineered a non-root user-space symlink resolver right in the build script:
 ```bash
 mkdir -p "${ENGINE_ROOT}/lib"
 SYSTEM_LIBCLANG="$(find /usr/lib64 /usr/lib -name "libclang.so*" 2>/dev/null | head -n 1)"
 ln -sf "$SYSTEM_LIBCLANG" "${ENGINE_ROOT}/lib/libclang.so"
 export LIBCLANG_PATH="${ENGINE_ROOT}/lib"
 ```
-`clang-sys` saw the symlink, found its long-lost dynamic library, and immediately went back to work.
+
+Once pointed at `./lib`, `clang-sys` resolved the library and compilation continued.
 
 ---
 
-### Act IV: The 18-Minute Linker and The 10-Byte Standoff
+### 3. Feature Unification and Dev Tools (DCOU)
 
-Now the machine was roaring. All 8 cores of Apple Silicon were pinned at 100%. 
+Agave has a feature flag called `dev-context-only-utils` (DCOU). Diagnostic tools like `agave-ledger-tool` need DCOU enabled to inspect internal structures, while production binaries like `agave-validator` must never have DCOU enabled (to prevent debug code or cost-model overrides from leaking into production consensus).
 
-At the 15-minute mark, the CPU fan kicked into high gear as the GNU linker (`ld`) began the monumental task of linking `agave-validator`—a 74 MB cryptographic monster containing the entire consensus state machine, Quic networking, BLS signatures, and SVM execution runtime.
+Due to how Cargo resolves workspace features, if you run `cargo build --workspace` with both types of binaries specified, Cargo unifies features across the graph and taints the release validator.
 
-At minute 18:
+Agave handles this by checking the build plan before compilation using an unstable cargo flag:
+
+```bash
+RUSTC_BOOTSTRAP=1 cargo build --profile release -Z unstable-options --unit-graph --bin solana-validator ...
+```
+
+The script parses the unit graph with `jq` to verify that `dev-context-only-utils` evaluates to false across all production units before proceeding. Production binaries are compiled first, followed by a separate pass for `dev-bins/Cargo.toml` (`agave-ledger-tool`).
+
+---
+
+### 4. The 18-Minute Linker and the Crates.io Timeout
+
+Compiling all of Agave from source on an 8-core ARM machine takes about 18 minutes. The final link step for `agave-validator` is particularly heavy; the resulting binary is over 70 MB unstripped.
+
+At minute 18, `cargo` completed:
+
 ```text
 Finished `release` profile [optimized] target(s) in 18m 22s
 ```
-*All 13 primary release binaries were built!* `agave-validator`, `solana`, `solana-keygen`, `solana-test-validator`, `agave-ledger-tool`—sitting right there in `target/release`.
 
-I was ready to celebrate. But `scripts/cargo-install-all.sh` wasn't finished. 
+All primary binaries (`agave-validator`, `solana`, `solana-keygen`, `solana-test-validator`, `agave-ledger-tool`) were sitting in `target/release`.
 
-At the very bottom of the script, it has a line that installs `spl-token-cli` directly from crates.io. And right at that exact second, crates.io's sparse index experienced a transient network hiccup.
+However, the default `cargo-install-all.sh` script does not stop after building the workspace. At the very bottom, it attempts to install `spl-token-cli` from crates.io. During our run, crates.io's sparse index had network latency issues, and the script entered a 20-minute retry loop:
 
-For the next **twenty minutes**, the build hung. Every two minutes, like clockwork, the terminal printed:
 ```text
 warning: spurious network error (5 tries remaining): transfer too slow: failed to transfer more than 10 bytes in 120s (transferred 0 bytes)
 ```
 
-Think about the sheer comedy of this situation:
-I had just compiled 74 Megabytes of bleeding-edge distributed systems cryptography from scratch on an unsupported CPU architecture... and the entire process was held hostage because Cargo couldn't download **ten bytes** of an auxiliary token CLI.
+Waiting 20 minutes for a 10-byte token transfer after successfully compiling a 74 MB consensus engine was a useful lesson in decoupling build steps. 
 
-I terminated the network retry loop, pulled the pre-compiled `spl-token` binary from our earlier toolchain cache, and wired up backwards-compatible symlinks (`solana-validator -> agave-validator`, `solana-ledger-tool -> agave-ledger-tool`).
-
-I ran the verification suite:
-```bash
-$ solana-keygen new --no-passphrase --no-outfile
-pubkey: Gzvvac7P6aZcj2FSC1oWmkm5ZipM1HSqNPGFVnDr9JbA
-Save this seed phrase: animal camera honey render wild hole wage...
-```
-It worked. All 21 binaries and symlinks were live. I compressed the whole suite into a 128 MB archive: `solana-release-aarch64-unknown-linux-gnu.tar.bz2`.
-
-We had conquered ARM64. 
-
-...Or so I thought.
+We killed the stalled job, used `--no-spl-token` in subsequent runs, and treated auxiliary CLI tools as standalone packages rather than bundling them into the critical path of the validator suite.
 
 ---
 
-### Act V: The glibc Time-Travel Paradox
+### 5. Multi-Distro Verification and the `glibc` Floor
 
-Now came the real test: Would this archive actually run on anyone else's machine?
+We packaged the suite into a standard tarball (`solana-release-aarch64-unknown-linux-gnu.tar.bz2`, ~128 MB) with backward-compatible symlinks (`solana-validator -> agave-validator`, `solana-ledger-tool -> agave-ledger-tool`) and a `version.yml` manifest.
 
-I fired up Docker and built a multi-distribution test matrix across four major Linux server distributions:
-1. **Ubuntu 24.04 LTS (Noble)**
-2. **Fedora 40**
-3. **Debian 12 (Bookworm)**
-4. **Ubuntu 22.04 LTS (Jammy)**
+To verify whether this archive would actually run on other machines, we set up Docker containers across four target Linux distributions:
+- Ubuntu 24.04 LTS (`glibc 2.39`)
+- Fedora 40 (`glibc 2.39`)
+- Debian 12 Bookworm (`glibc 2.36`)
+- Ubuntu 22.04 LTS (`glibc 2.35`)
 
-I hit run.
+We ran `ldd` checks and smoke tests (`solana-keygen new`, `solana --version`) inside each container:
 
-- **Ubuntu 24.04:** `solana --version` $\rightarrow$ **PASS**. Keypair generation $\rightarrow$ **PASS**.
-- **Fedora 40:** `solana --version` $\rightarrow$ **PASS**. Validator smoke test $\rightarrow$ **PASS**.
-- **Debian 12:**
-  ```text
-  /opt/solana-release/bin/solana: /lib/aarch64-linux-gnu/libc.so.6: version `GLIBC_2.38' not found
-  ```
-- **Ubuntu 22.04:**
-  ```text
-  /opt/solana-release/bin/solana: /lib/aarch64-linux-gnu/libc.so.6: version `GLIBC_2.38' not found
-  ```
+| Target Distribution | glibc Version | Linkage Check | Keygen / CLI Test |
+| :--- | :--- | :--- | :--- |
+| **Ubuntu 24.04 LTS** | 2.39 | All shared libraries resolved | **PASS** |
+| **Fedora 40** | 2.39 | All shared libraries resolved | **PASS** |
+| **Debian 12** | 2.36 | Missing `GLIBC_2.38`, `CXXABI_1.3.15` | **FAIL** |
+| **Ubuntu 22.04 LTS** | 2.35 | Missing `GLIBC_2.38`, `CXXABI_1.3.15` | **FAIL** |
 
-*Wait. Why?*
+The failures on Debian 12 and Ubuntu 22.04 came down to GNU `glibc` symbol versioning.
 
-Welcome to **The glibc Floor Principle**.
+Glibc guarantees **forward compatibility**, but not **backward compatibility**:
+- When you compile software on a modern host like Fedora with `glibc 2.41`, the compiler links against newer symbol versions (such as `GLIBC_2.38` for ISO C23 math and string functions).
+- If you copy that binary to a system running `glibc 2.35` (Ubuntu 22.04) or `glibc 2.36` (Debian 12), the dynamic linker aborts because those symbols do not exist in the older runtime.
 
-GNU `glibc` is designed with strict **forward compatibility, but zero backward compatibility**.
-- If you compile software on an operating system with `glibc 2.41` (like bleeding-edge Fedora 43), the dynamic linker binds your binary to modern symbol versions like `GLIBC_2.38` (for ISO C23 functions).
-- When you take that binary and run it on Ubuntu 22.04 (`glibc 2.35`) or Debian 12 (`glibc 2.36`), the dynamic linker looks at your binary and says: *"You are asking for symbols from the future. I cannot run this."*
+This is why building release software directly on a developer's workstation often causes compatibility issues. Most Solana validators run on Ubuntu 22.04 LTS or Debian 12, not bleeding-edge Fedora.
 
-It was a profound engineering epiphany:
-**The best developer workstation is often the worst build host.**
+The standard fix in release engineering is to set the compile floor to the oldest supported distribution:
+If you build the release inside an **Ubuntu 22.04 container (`glibc 2.35`)**, the resulting binary only binds to symbols available in 2.35 or earlier. Because glibc is forward-compatible, that same binary will run cleanly on Ubuntu 22.04, Debian 12, Ubuntu 24.04, Fedora 40/41, and Arch Linux without symbol conflicts.
 
-Because we built on the newest compiler and newest glibc, our binaries could only run on the newest distributions. But Solana mainnet validators don't run on bleeding-edge Fedora; they run on **Ubuntu 22.04 LTS**.
-
-The solution was crystal clear:
-To make a binary that runs on 100% of Linux machines on Earth, you must compile inside an **Ubuntu 22.04 LTS container (`glibc 2.35` floor)**.
-- A binary compiled against `glibc 2.35` will run on Ubuntu 22.04.
-- It will run on Debian 12 (`glibc 2.36`).
-- It will run on Ubuntu 24.04 (`glibc 2.39`).
-- It will run on Fedora 40/41, Arch Linux, Amazon Linux 2023, and Asahi!
-
-Because you can always travel forward in glibc time; you just can never travel back.
+We updated our CI template (`ci-templates/arm64-release.yml`) to use `container: ubuntu:22.04` on GitHub's native `ubuntu-24.04-arm` runners.
 
 ---
 
-### Act VI: Welcome to SolARM
+### What's Next
 
-What started as a frustrated developer staring at a 404 error turned into a full-blown open-source initiative: **SolARM**.
+We packaged this work into an open-source project called **SolARM**:
+- A public repository with a working 1-line installer for Linux ARM64: [`coad1024-cmd/solana-arm64-linux`](https://github.com/coad1024-cmd/solana-arm64-linux).
+- A private staging engine (`agave-arm64-engine`) with reproducible build scripts, FFI patchers, and multi-distro test runners.
+- An upstream grant proposal submitted to the Solana Foundation to add native ARM64 release automation directly to Anza's core CI pipeline.
 
-Here is where we stand today:
-
-1. **A Working Public Proof-of-Work:**
-   We released the first standalone Linux ARM64 installer at [`coad1024-cmd/solana-arm64-linux`](https://github.com/coad1024-cmd/solana-arm64-linux).
-   Anyone on an ARM64 Linux box can now run:
-   ```bash
-   sh -c "$(curl -sSfL https://raw.githubusercontent.com/coad1024-cmd/solana-arm64-linux/main/install.sh)"
-   ```
-   And immediately get native, screaming-fast Solana CLI tools.
-
-2. **A Private Multi-Distro CI Engine:**
-   We built the automated build engine (`agave-arm64-engine`) featuring:
-   - Automated GCC 15 FFI AST patching.
-   - Non-root dynamic Clang resolution.
-   - Containerized multi-distro test runners.
-   - Native GitHub Actions workflows on `ubuntu-24.04-arm` runners.
-
-3. **A Formal Upstream Foundation Proposal:**
-   We drafted and submitted a $25,000 Solana Foundation Developer Tooling Grant Proposal to upstream these exact GitHub Actions workflows directly into `anza-xyz/agave`, ensuring that Linux ARM64 becomes a permanent, Tier-1 release target for the entire Solana ecosystem.
-
-### Epilogue: The Moral of the Story
-
-Sometimes, in software engineering, a `404 Not Found` is not an error message. 
-
-It is an invitation.
-
-If you are running Linux on Apple Silicon, an AWS Graviton instance, or an Oracle Ampere cluster, go give **SolARM** a spin. And the next time a C++ compiler tells you that an integer doesn't exist, just remember: it's not you. It's GCC 15.
-
----
-
-*Code, issues, and release artifacts are available at [GitHub: coad1024-cmd/solana-arm64-linux](https://github.com/coad1024-cmd/solana-arm64-linux).*
+If you are running Linux on an Apple Silicon machine, an AWS Graviton instance, or an Oracle Ampere server, the 1-line installer is live on GitHub. The goal is to make Linux ARM64 a first-class release target upstream so no one has to debug GCC 15 headers just to run a test validator.

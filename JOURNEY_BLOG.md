@@ -1,6 +1,6 @@
 # Notes on Compiling Solana on Linux ARM64 (and how SolARM came together)
 
-*Hasher Nabi — September 2026*
+*Hash Nabi — September 2026*
 
 ---
 

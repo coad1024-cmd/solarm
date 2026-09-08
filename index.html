@@ -334,16 +334,16 @@
         <article class="case-study-card">
           <div class="case-study-meta">
             <span class="meta-index">CASE STUDY 05</span>
-            <span class="meta-topic">TURBINE BROADCAST &bull; DIRECT UNICAST TUNNELING</span>
+            <span class="meta-topic">TURBINE BROADCAST &bull; PRE-WARMED QUIC &amp; UDP DIRECT PIPE</span>
             <span class="meta-status">Production Verified</span>
           </div>
-          <h3 class="case-study-title">Sub-300ms Slot Propagation: Next-Leader Direct Pipe Forwarding for Solana Turbine</h3>
+          <h3 class="case-study-title">Sub-300ms Slot Propagation: Next-Leader Direct Pipe Forwarding with QUIC Stream Multiplexing &amp; Pre-Warmed Connection Pools</h3>
           <p class="case-study-desc">
-            As Solana reduces slot times to 350ms and 200ms, multi-hop Turbine broadcast tree latency creates severe leader handoff delays and elevates skip rates. We engineered an opportunistic parallel UDP &amp; QUIC direct unicast tunnel transmitting shreds directly to the slot S+1 leader's TVU socket concurrently with tree broadcast, cutting handoff latency to a single network hop without altering consensus or shred Merkle trees.
+            As Solana reduces slot times to 350ms and 200ms, multi-hop Turbine tree propagation creates severe leader handoff delays and elevates skip rates. We engineered an opportunistic parallel UDP &amp; QUIC direct pipe transmitting shreds directly to the upcoming leader's TVU socket concurrently with tree broadcast. Incorporates 4-slot window lookahead, stream-per-FEC-set multiplexing to eliminate Head-of-Line blocking, and pre-warmed QUIC connection pools for 0-RTT window boundary handoffs.
           </p>
           <div class="case-study-benchmark">
-            <span>10,000-Slot Multi-Regime Simulation:</span>
-            <span class="bench-metric">Mean Latency: 68.2 ms &rarr; 24.0 ms (-64.8%) &bull; 200ms Slot Skips: 26.7% &rarr; 0.0%</span>
+            <span>10,000-Slot Multi-Regime Simulation (100 Validators):</span>
+            <span class="bench-metric">Mean Latency: 68.2 ms &rarr; 24.0 ms (-64.8%) &bull; 200ms Skips: 26.7% &rarr; 0.0% &bull; Window Boundary 0-RTT: 25.7 ms</span>
           </div>
           <div class="case-study-links">
             <a href="https://gist.github.com/coad1024-cmd/2c044299146fe13d569325f0f8bde311" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">

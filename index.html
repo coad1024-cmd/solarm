@@ -359,16 +359,16 @@
         <article class="case-study-card">
           <div class="case-study-meta">
             <span class="meta-index">CASE STUDY 06</span>
-            <span class="meta-topic">TPU INGRESS &bull; ZERO-ALLOC PRE-SIGVERIFY LRU</span>
+            <span class="meta-topic">TPU INGRESS &bull; SHARDED PRE-SIGVERIFY LRU</span>
             <span class="meta-status">Production Verified</span>
           </div>
-          <h3 class="case-study-title">Mitigating Free MEV Duplicate-Nonce Spam: Pre-Sigverify Header Filtering in Stake-Weighted QoS</h3>
+          <h3 class="case-study-title">Mitigating Free MEV Duplicate-Nonce Spam: Pre-Sigverify Sharded Filtering in Stake-Weighted QoS</h3>
           <p class="case-study-desc">
-            MEV searchers frequently emit 30&ndash;50 duplicate transactions targeting the same durable nonce account with varying priority fees. Because only 1 transaction can ever land, the remaining 49 consume expensive GPU/CPU ed25519 signature verification cycles (42.25 &mu;s each) for free. We implemented a zero-allocation raw packet inspector and 32-shard cache-line aligned LRU filter in TPU ingress, dropping duplicate spam before sigverify.
+            Targeting upstream Agave #8970 and Firedancer PR #7284. MEV searchers emit 30&ndash;50 duplicate transactions targeting the same durable nonce with escalating tips. Only 1 can land; the remaining 49 consume expensive ed25519 signature verification cycles (42.87 &mu;s each) for free. We implemented a zero-allocation raw packet inspector (7.79 ns) and a 32-shard 64-byte cache-line aligned LRU filter, dropping duplicate spam before sigverify and cutting lock contention by 2.44x.
           </p>
           <div class="case-study-benchmark">
             <span>Criterion Micro-Benchmark Results:</span>
-            <span class="bench-metric">Header Inspect: 7.79 ns vs Sigverify: 42.25 &mu;s (5,424x Faster) &bull; Sigverify Cycles Saved: 98.0%</span>
+            <span class="bench-metric">Header Inspect: 7.79 ns &bull; 8-Thread Contention: 84.71 ns (2.44x Faster vs Single Mutex) &bull; Sigverify Cycles Saved: 98.0%</span>
           </div>
           <div class="case-study-links">
             <a href="https://gist.github.com/coad1024-cmd/e54feb75806bbb2ac7a831f115b4c0c9" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">

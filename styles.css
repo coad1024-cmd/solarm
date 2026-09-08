@@ -681,64 +681,6 @@ code, pre {
   color: var(--text-secondary);
 }
 
-/* Calculator Section */
-.calc-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  background-color: var(--bg-subtle);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  padding: 28px;
-}
-
-.calc-control {
-  margin-bottom: 20px;
-}
-
-.calc-label {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.88rem;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-.calc-slider {
-  width: 100%;
-  accent-color: var(--text-main);
-  cursor: pointer;
-}
-
-.calc-results {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-  border-left: 1px solid var(--border-light);
-  padding-left: 28px;
-}
-
-.result-card {
-  background-color: var(--bg-main);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm);
-  padding: 14px 18px;
-}
-
-.result-label {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 4px;
-}
-
-.result-val {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--text-main);
-  letter-spacing: -0.02em;
-}
 
 /* About Section */
 .about-box {
@@ -898,10 +840,10 @@ code, pre {
   .hero-specs {
     grid-template-columns: repeat(2, 1fr);
   }
-  .profile-grid, .contact-grid, .calc-grid {
+  .profile-grid, .contact-grid {
     grid-template-columns: 1fr;
   }
-  .profile-sidebar, .contact-channels, .calc-results {
+  .profile-sidebar, .contact-channels {
     border-left: none;
     border-top: 1px solid var(--border-light);
     padding-left: 0;

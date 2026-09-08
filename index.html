@@ -43,7 +43,6 @@
           <li><a href="#services">Services</a></li>
           <li><a href="#work">Proof of Work</a></li>
           <li><a href="#toolchain">Toolchain</a></li>
-          <li><a href="#calculator">Efficiency</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
@@ -392,57 +391,6 @@ solana-cli 1.18.26 (client:SolanaLabs / Agave Native aarch64)</div>
             <!-- Populated dynamically by app.js -->
           </tbody>
         </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- Cloud Efficiency / ROI Calculator -->
-  <section class="section" id="calculator">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-tag">Economic Modeling</div>
-        <h2 class="section-title">Compute efficiency & cost optimization</h2>
-        <p class="section-description">
-          Evaluate the infrastructure savings achieved by deploying native aarch64 binaries instead of x86 emulation or full-source compilation.
-        </p>
-      </div>
-
-      <div class="calc-grid">
-        <div class="calc-inputs">
-          <div class="calc-control">
-            <div class="calc-label">
-              <span>Engineering Team Size</span>
-              <span id="calc-devs-val" class="bin-name">10 Developers</span>
-            </div>
-            <input type="range" id="calc-devs" class="calc-slider" min="1" max="100" value="10">
-          </div>
-
-          <div class="calc-control">
-            <div class="calc-label">
-              <span>Daily CI/CD Test Builds</span>
-              <span id="calc-builds-val" class="bin-name">25 Builds/Day</span>
-            </div>
-            <input type="range" id="calc-builds" class="calc-slider" min="5" max="200" value="25">
-          </div>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0;">
-            Based on eliminating 45 minutes of compilation per build and migrating execution to AWS Graviton 3 instances (40% cost-performance improvement).
-          </p>
-        </div>
-
-        <div class="calc-results">
-          <div class="result-card">
-            <div class="result-label">Engineering Hours Saved Monthly</div>
-            <div class="result-val" id="calc-hours-saved">616 hrs / mo</div>
-          </div>
-          <div class="result-card">
-            <div class="result-label">Cloud Compute Budget Preserved</div>
-            <div class="result-val" id="calc-cloud-saved">$1,980 USD / mo</div>
-          </div>
-          <div class="result-card">
-            <div class="result-label">Estimated Carbon Reduction</div>
-            <div class="result-val" id="calc-co2-saved">111 kg CO₂e</div>
-          </div>
-        </div>
       </div>
     </div>
   </section>

@@ -71,7 +71,7 @@ solana-cli 1.18.26 (client:SolanaLabs native ARM64)`
 document.addEventListener("DOMContentLoaded", () => {
   initTerminalTabs();
   initToolingMatrix();
-  initCalculator();
+
   initCopyButtons();
 });
 
@@ -141,43 +141,7 @@ function initToolingMatrix() {
   renderTable();
 }
 
-// Interactive Efficiency & Time Savings Calculator
-function initCalculator() {
-  const devsInput = document.getElementById("calc-devs");
-  const buildsInput = document.getElementById("calc-builds");
-  
-  const devsVal = document.getElementById("calc-devs-val");
-  const buildsVal = document.getElementById("calc-builds-val");
 
-  const hoursSavedElem = document.getElementById("calc-hours-saved");
-  const cloudSavedElem = document.getElementById("calc-cloud-saved");
-  const co2SavedElem = document.getElementById("calc-co2-saved");
-
-  function updateCalculations() {
-    if (!devsInput || !buildsInput) return;
-    const devs = parseInt(devsInput.value, 10);
-    const buildsPerDay = parseInt(buildsInput.value, 10);
-
-    if (devsVal) devsVal.textContent = `${devs} Developers`;
-    if (buildsVal) buildsVal.textContent = `${buildsPerDay} Builds/Day`;
-
-    // Calculation constants
-    const totalBuildsPerMonth = (devs * 2) + (buildsPerDay * 22);
-    const hoursSavedMonth = Math.round(totalBuildsPerMonth * 1.08);
-    const dollarsSavedMonth = Math.round((hoursSavedMonth * 2.8) + (totalBuildsPerMonth * 0.45));
-    const co2SavedKg = Math.round(hoursSavedMonth * 0.18);
-
-    if (hoursSavedElem) hoursSavedElem.textContent = `${hoursSavedMonth.toLocaleString()} hrs / mo`;
-    if (cloudSavedElem) cloudSavedElem.textContent = `$${dollarsSavedMonth.toLocaleString()} USD / mo`;
-    if (co2SavedElem) co2SavedElem.textContent = `${co2SavedKg.toLocaleString()} kg CO₂e`;
-  }
-
-  if (devsInput && buildsInput) {
-    devsInput.addEventListener("input", updateCalculations);
-    buildsInput.addEventListener("input", updateCalculations);
-    updateCalculations();
-  }
-}
 
 // Copy to Clipboard Utility with Toast Feedback
 function initCopyButtons() {

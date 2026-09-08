@@ -44,4 +44,4 @@ Open `http://localhost:8080` in any modern web browser.
 
 - **License:** Apache 2.0 / MIT Open Source Public Good
 - **Maintainer:** Hasher Nabi / SolARM
-- **Grant Proposal:** Solana Foundation Developer Tooling Grant ($25,000 USD)
+- **Grant Proposal:** Solana Foundation Core Infrastructure Grant ($75,000 USD across 3 Milestones) — [Read GRANT_PROPOSAL.md](https://github.com/coad1024-cmd/solana-arm64-linux/blob/main/GRANT_PROPOSAL.md)

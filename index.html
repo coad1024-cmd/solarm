@@ -42,6 +42,7 @@
         <ul class="nav-links">
           <li><a href="#services">Services</a></li>
           <li><a href="#work">Proof of Work</a></li>
+          <li><a href="#grant">Grant Proposal</a></li>
           <li><a href="#toolchain">Toolchain</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#contact">Contact</a></li>
@@ -73,6 +74,9 @@
       <div class="hero-actions">
         <a href="#work" class="btn btn-primary">
           Explore Technical Proof of Work
+        </a>
+        <a href="#grant" class="btn btn-secondary">
+          Foundation Grant Proposal ($75k)
         </a>
         <a href="#toolchain" class="btn btn-secondary">
           Native Toolchain (24 Binaries)
@@ -384,6 +388,72 @@
     </div>
   </section>
 
+  <!-- Solana Foundation Grant Proposal -->
+  <section class="section" id="grant">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Ecosystem Alignment</div>
+        <h2 class="section-title">Solana Foundation Grant Proposal</h2>
+        <p class="section-description">
+          A production-grade, 3-milestone $75,000 grant proposal synthesizing all five verified protocol deliverables, empirical ARM64 benchmarks, and zero-fork upstreaming blueprints.
+        </p>
+      </div>
+
+      <div class="about-box" style="border-left: 4px solid var(--primary, #10b981);">
+        <div class="about-header">
+          <div class="about-title-group" style="width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
+              <span class="meta-topic" style="color: #10b981; font-weight: 700; font-family: monospace; font-size: 0.85rem;">SOLANA FOUNDATION &bull; CORE INFRASTRUCTURE TRACK</span>
+              <span class="meta-status" style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-family: monospace;">100% Empirically Pre-Validated</span>
+            </div>
+            <h3 style="margin: 0 0 8px 0;">SolARM: Native Linux ARM64 Release Infrastructure &amp; Protocol Subsystem Optimizations</h3>
+            <p style="color: #94a3b8; margin: 0;">Authored by Hash Nabi &bull; Requesting $75,000 across 3 milestone-gated phases ($25,000 / phase)</p>
+          </div>
+        </div>
+
+        <p style="margin-top: 16px;">
+          SolARM addresses the 45–90 minute compilation tax and missing native Linux ARM64 (<code>aarch64-unknown-linux-gnu</code>) releases across AWS Graviton and Ampere validators, while resolving 5 critical protocol bottlenecks with zero breaking changes:
+        </p>
+
+        <div class="about-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+          <div class="principle-card">
+            <h5>1. Turbine FEC SIMD</h5>
+            <p>5.58x faster Reed-Solomon encoding on ARM NEON (<code>vqtbl1q_u8</code>), 100% bit-exact wire parity (<a href="https://github.com/anza-xyz/agave/issues/9495" target="_blank" rel="noopener noreferrer">Agave #9495</a>).</p>
+          </div>
+          <div class="principle-card">
+            <h5>2. SBF Stack Spill Eliminator</h5>
+            <p>Bypasses SBF 4KB frame limits via in-place bump allocation; 7,360B frame collapsed to 0B (<a href="https://github.com/otter-sec/anchor/issues/4941" target="_blank" rel="noopener noreferrer">Anchor #4941</a>).</p>
+          </div>
+          <div class="principle-card">
+            <h5>3. Lock-Free RPC Pre-Cacher</h5>
+            <p>Eliminates 31-slot JSON-RPC -32602 epoch rollover outage via 12.1μs atomic pointer swaps (<a href="https://github.com/anza-xyz/agave/issues/6845" target="_blank" rel="noopener noreferrer">Agave #6845</a>).</p>
+          </div>
+          <div class="principle-card">
+            <h5>4. Sub-300ms Direct Pipe</h5>
+            <p>Pre-warmed QUIC connection pools and 4-slot lookahead cut latency by 64.8% and drops 200ms skips to 0% (<a href="https://github.com/anza-xyz/agave/issues/9081" target="_blank" rel="noopener noreferrer">Agave #9081</a>).</p>
+          </div>
+          <div class="principle-card">
+            <h5>5. SWQoS Pre-Sigverify Filter</h5>
+            <p>7.79ns zero-alloc inspector and 32-shard LRU filter drop MEV nonce spam, saving 98.0% CPU cycles (<a href="https://github.com/anza-xyz/agave/issues/8970" target="_blank" rel="noopener noreferrer">Agave #8970</a>).</p>
+          </div>
+          <div class="principle-card">
+            <h5>6. 24 Native ARM64 Binaries</h5>
+            <p>Production release automation collapsing validator deployment time from 90 minutes down to 4.18 seconds.</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+          <a href="https://github.com/coad1024-cmd/solana-arm64-linux/blob/main/GRANT_PROPOSAL.md" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            Read Full Grant Proposal (Markdown) &rarr;
+          </a>
+          <a href="https://github.com/coad1024-cmd/solana-arm64-linux" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+            View Infrastructure Repository
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Open Infrastructure / Toolchain -->
   <section class="section" id="toolchain">
     <div class="container">
@@ -536,6 +606,7 @@ solana-cli 1.18.26 (client:SolanaLabs / Agave Native aarch64)</div>
         <span>&copy; SolARM Systems Engineering. All rights reserved.</span>
       </div>
       <div class="footer-links">
+        <a href="https://github.com/coad1024-cmd/solana-arm64-linux/blob/main/GRANT_PROPOSAL.md" target="_blank" rel="noopener noreferrer">Grant Proposal</a>
         <a href="https://github.com/coad1024-cmd/solana-arm64-linux" target="_blank" rel="noopener noreferrer">Toolchain</a>
         <a href="https://gist.github.com/coad1024-cmd/d2c65b043dac6692ce2935d1d2d9b191" target="_blank" rel="noopener noreferrer">Research</a>
         <a href="https://gist.github.com/coad1024-cmd/066839b7824c24f45f23966382cb0e8e" target="_blank" rel="noopener noreferrer">Manifesto</a>

@@ -100,13 +100,13 @@ We implemented an asynchronous background worker that pre-calculates and warms t
 * **Upstream:** Documented in Anza Agave issue #6845.
 
 #### 5. Speculative next-leader direct pipe (`solana-direct-leader-pipe`)
-As Solana lowers target slot durations from 400 ms to 350 ms and ultimately 200 ms, block handoff latency between consecutive leaders becomes the primary driver of skip rates. In the multi-hop Turbine broadcast tree, the upcoming leader receives parent shreds after 2 to 4 network hops (60 to 110 ms), leaving insufficient time to execute transactions before starting its own slot.
+As Solana lowers target slot durations from 400 ms to 350 ms and ultimately 200 ms, block handoff latency between consecutive leaders becomes the primary driver of skip rates. While Anza merged basic UDP next-leader forwarding into `master` (PR #12428), lossy cross-data-center WAN links still suffer packet drop and 1-RTT handshake penalties without transport multiplexing.
 
-We engineered a speculative direct-pipe tunnel that operates concurrently with tree broadcast. The current leader resolves the upcoming leader deterministically from the pre-cached schedule and streams shreds directly over a pre-warmed QUIC connection with stream-per-FEC multiplexing.
+Building upon the PR #12428 baseline, we engineered an out-of-band QUIC direct pipe operating concurrently with tree broadcast. Incorporates 4-slot window lookahead, stream-per-FEC multiplexing to eliminate Head-of-Line blocking, and pre-warmed QUIC connection pools for 0-RTT window boundary handoffs.
 
 * **Simulation (10,000 slots across 100 validators):** Cuts mean shred arrival latency from **68.22 ms down to 24.00 ms (-64.8%)**.
 * **Skip Rate Impact:** Under 200 ms slots, drops validator skip rates from **26.67% to 0.00%**.
-* **Upstream:** Documented in Anza Agave issue #9081.
+* **Upstream:** Evaluates and extends Anza Agave issue #9081 and merged PR #12428.
 
 #### 6. Durable nonce pre-sigverify SWQoS guard (`solana-nonce-swqos`)
 MEV searchers frequently submit 30 to 50 transactions sharing the same durable nonce account with varying tips to secure priority block placement. Because the nonce advances on the first executed transaction, only one transaction can ever succeed and pay fees. The remaining 49 transactions fail execution, but still consume full ed25519 signature verification on validator GPU/CPU worker threads (42.25 μs per packet) and occupy banking scheduler locks at zero economic cost to the attacker.

@@ -168,7 +168,7 @@
             <span class="cap-tag">ARM NEON</span>
             <span class="cap-tag">AVX-512</span>
             <span class="cap-tag">Reed-Solomon GF(2^8)</span>
-            <span class="cap-tag">vtbl1_u8</span>
+            <span class="cap-tag">vqtbl1q_u8</span>
           </div>
         </div>
 
@@ -239,7 +239,7 @@
           </div>
           <h3 class="case-study-title">Accelerating Solana Turbine: Galois Field GF(2^8) Arithmetic via ARM NEON 4-Bit Nibble Permutations</h3>
           <p class="case-study-desc">
-            In Solana Turbine, block dissemination relies on Reed-Solomon erasure coding where Galois Field multiplications represent the primary computational bottleneck. Traditional scalar table lookups incur frequent L1 cache misses and pipeline stalls. We restructured multiplication into parallel 4-bit nibble lookups executed across ARM NEON 128-bit vector registers using <code>vtbl1_u8</code>, processing 16 bytes simultaneously without branching.
+            In Solana Turbine, block dissemination relies on Reed-Solomon erasure coding where Galois Field multiplications represent the primary computational bottleneck. Traditional scalar table lookups incur frequent L1 cache misses and pipeline stalls. We restructured multiplication into parallel 4-bit nibble lookups executed across ARM NEON 128-bit vector registers using <code>vqtbl1q_u8</code>, processing 16 bytes simultaneously without branching.
           </p>
           <div class="case-study-benchmark">
             <span>Criterion Benchmark Result:</span>
@@ -339,7 +339,7 @@
           </div>
           <h3 class="case-study-title">Sub-300ms Slot Propagation: Next-Leader Direct Pipe Forwarding with QUIC Stream Multiplexing &amp; Pre-Warmed Connection Pools</h3>
           <p class="case-study-desc">
-            As Solana reduces slot times to 350ms and 200ms, multi-hop Turbine tree propagation creates severe leader handoff delays and elevates skip rates. We engineered an opportunistic parallel UDP &amp; QUIC direct pipe transmitting shreds directly to the upcoming leader's TVU socket concurrently with tree broadcast. Incorporates 4-slot window lookahead, stream-per-FEC-set multiplexing to eliminate Head-of-Line blocking, and pre-warmed QUIC connection pools for 0-RTT window boundary handoffs.
+            As Solana reduces slot times to 350ms and 200ms, multi-hop Turbine tree propagation creates severe leader handoff delays. Building upon Agave's merged UDP next-leader forwarding (PR #12428), we engineered an opportunistic parallel QUIC &amp; UDP direct pipe to mitigate packet drop across congested cross-DC WAN paths. Incorporates 4-slot window lookahead, stream-per-FEC-set multiplexing to eliminate Head-of-Line blocking, and pre-warmed QUIC connection pools for 0-RTT window boundary handoffs.
           </p>
           <div class="case-study-benchmark">
             <span>10,000-Slot Multi-Regime Simulation (100 Validators):</span>
